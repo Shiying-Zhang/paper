@@ -1,0 +1,24 @@
+# Site settings
+title: "Paper Reading Notes"
+description: "个人论文阅读笔记归档"
+author: "Shiying-Zhang"
+baseurl: "/paper"  # GitHub 仓库名
+url: "https://Shiying-Zhang.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Collections
+collections:
+  papers:
+    output: true
+    permalink: /papers/:slug/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "papers"
+    values:
+      layout: "paper"

@@ -1,0 +1,99 @@
+---
+layout: default
+---
+
+<section class="hero">
+  <h1>{{ site.title }}</h1>
+  <p>{{ site.description }}</p>
+  <div class="stats">
+    <span class="stat-item">共 <strong>{{ site.papers.size }}</strong> 篇论文</span>
+  </div>
+</section>
+
+<section class="controls">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="搜索论文标题、作者、标签...">
+  </div>
+  <div class="filter-group">
+    <label>标签筛选：</label>
+    <div id="tagFilters" class="tag-filters">
+      <button class="tag-btn active" data-tag="all">全部</button>
+      {% assign all_tags = "" | split: "" %}
+      {% for paper in site.papers %}
+        {% for tag in paper.tags %}
+          {% unless all_tags contains tag %}
+            {% assign all_tags = all_tags | push: tag %}
+          {% endunless %}
+        {% endfor %}
+      {% endfor %}
+      {% assign sorted_tags = all_tags | sort %}
+      {% for tag in sorted_tags %}
+        <button class="tag-btn" data-tag="{{ tag }}">{{ tag }}</button>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="sort-group">
+    <label>排序：</label>
+    <select id="sortSelect">
+      <option value="year-desc">年份 (新→旧)</option>
+      <option value="year-asc">年份 (旧→新)</option>
+      <option value="rating-desc">评分 (高→低)</option>
+      <option value="rating-asc">评分 (低→高)</option>
+      <option value="title-asc">标题 (A→Z)</option>
+    </select>
+  </div>
+</section>
+
+<section class="paper-table-wrapper">
+  <table class="paper-table" id="paperTable">
+    <thead>
+      <tr>
+        <th>标题</th>
+        <th>作者</th>
+        <th>年份</th>
+        <th>会议/期刊</th>
+        <th>标签</th>
+        <th>评分</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% assign sorted_papers = site.papers | sort: "year" | reverse %}
+      {% for paper in sorted_papers %}
+      <tr class="paper-row"
+          data-title="{{ paper.title | downcase }}"
+          data-authors="{{ paper.authors | downcase }}"
+          data-year="{{ paper.year }}"
+          data-venue="{{ paper.venue }}"
+          data-tags="{{ paper.tags | join: ',' | downcase }}"
+          data-rating="{{ paper.rating }}">
+        <td class="paper-title-cell">
+          <a href="{{ paper.url | relative_url }}">{{ paper.title }}</a>
+          <div class="paper-summary">{{ paper.summary }}</div>
+        </td>
+        <td class="paper-authors">{{ paper.authors }}</td>
+        <td class="paper-year">{{ paper.year }}</td>
+        <td class="paper-venue">{{ paper.venue }}</td>
+        <td class="paper-tags">
+          {% for tag in paper.tags %}
+            <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </td>
+        <td class="paper-rating">
+          {% for i in (1..5) %}
+            {% if i <= paper.rating %}
+              <span class="star filled">&#9733;</span>
+            {% else %}
+              <span class="star">&#9733;</span>
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="noResults" class="no-results" style="display:none;">
+    没有找到匹配的论文
+  </div>
+</section>
+
+{{ content }}

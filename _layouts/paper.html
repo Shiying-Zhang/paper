@@ -1,0 +1,63 @@
+---
+layout: default
+---
+
+<article class="paper-detail">
+  <a href="{{ '/' | relative_url }}" class="back-link">&larr; 返回列表</a>
+
+  <header class="paper-header">
+    <h1>{{ page.title }}</h1>
+    <div class="paper-meta">
+      <div class="meta-row">
+        <span class="meta-label">作者</span>
+        <span class="meta-value">{{ page.authors }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">年份</span>
+        <span class="meta-value">{{ page.year }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">会议/期刊</span>
+        <span class="meta-value">{{ page.venue }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">评分</span>
+        <span class="meta-value rating">
+          {% for i in (1..5) %}
+            {% if i <= page.rating %}
+              <span class="star filled">&#9733;</span>
+            {% else %}
+              <span class="star">&#9733;</span>
+            {% endif %}
+          {% endfor %}
+        </span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">标签</span>
+        <span class="meta-value">
+          {% for tag in page.tags %}
+            <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">摘要</span>
+        <span class="meta-value summary">{{ page.summary }}</span>
+      </div>
+    </div>
+    <div class="paper-links">
+      {% if page.paper_url %}
+        <a href="{{ page.paper_url }}" target="_blank" class="btn btn-paper">论文原文</a>
+      {% endif %}
+      {% if page.code_url %}
+        <a href="{{ page.code_url }}" target="_blank" class="btn btn-code">代码仓库</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="paper-content">
+    {{ content }}
+  </div>
+
+  <a href="{{ '/' | relative_url }}" class="back-link">&larr; 返回列表</a>
+</article>

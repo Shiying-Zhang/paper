@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper Reading Notes</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2563eb; --primary-light: #dbeafe; --text: #1e293b;
+      --text-secondary: #64748b; --bg: #f8fafc; --white: #ffffff;
+      --border: #e2e8f0; --star-filled: #f59e0b; --star-empty: #d1d5db;
+      --tag-bg: #eff6ff; --tag-text: #1d4ed8;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08); --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+      --radius: 8px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    .site-header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .site-logo { font-size: 18px; font-weight: 700; color: var(--text); }
+    .site-logo:hover { text-decoration: none; color: var(--primary); }
+    .site-nav a { margin-left: 24px; color: var(--text-secondary); font-size: 14px; }
+    .site-nav a:hover { color: var(--primary); text-decoration: none; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 48px 0 32px; }
+    .hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .hero p { color: var(--text-secondary); font-size: 16px; }
+    .stats { margin-top: 12px; color: var(--text-secondary); font-size: 14px; }
+    .stats strong { color: var(--primary); }
+
+    /* Controls */
+    .controls { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow); }
+    .search-box { margin-bottom: 16px; }
+    .search-box input { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+    .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+    .filter-group { margin-bottom: 12px; }
+    .filter-group label, .sort-group label { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-right: 8px; }
+    .tag-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tag-btn { padding: 4px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--white); color: var(--text-secondary); font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .tag-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .tag-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+    .sort-group select { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; cursor: pointer; }
+
+    /* Table */
+    .paper-table-wrapper { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 48px; }
+    .paper-table { width: 100%; border-collapse: collapse; }
+    .paper-table thead { background: #f1f5f9; }
+    .paper-table th { padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .paper-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: top; }
+    .paper-row:last-child td { border-bottom: none; }
+    .paper-row:hover { background: #f8faff; }
+    .paper-title-cell a { font-weight: 600; font-size: 14px; }
+    .paper-summary { color: var(--text-secondary); font-size: 12px; margin-top: 4px; line-height: 1.4; }
+    .paper-authors { color: var(--text-secondary); font-size: 13px; max-width: 200px; }
+    .paper-year { font-weight: 500; white-space: nowrap; }
+    .paper-venue { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+
+    /* Tags */
+    .tag { display: inline-block; padding: 2px 10px; background: var(--tag-bg); color: var(--tag-text); border-radius: 20px; font-size: 11px; font-weight: 500; margin: 2px 2px; white-space: nowrap; }
+
+    /* Stars */
+    .star { color: var(--star-empty); font-size: 14px; }
+    .star.filled { color: var(--star-filled); }
+
+    .no-results { text-align: center; padding: 48px 20px; color: var(--text-secondary); font-size: 15px; }
+
+    /* Footer */
+    footer { text-align: center; padding: 24px 0; color: var(--text-secondary); font-size: 13px; border-top: 1px solid var(--border); }
+
+    /* Detail Modal Overlay */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 200; overflow-y: auto; }
+    .modal-overlay.show { display: block; }
+    .modal-content { max-width: 800px; margin: 40px auto; background: var(--bg); border-radius: var(--radius); min-height: 80vh; }
+
+    /* Paper Detail */
+    .paper-detail { padding: 32px; }
+    .back-link { display: inline-block; color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; cursor: pointer; }
+    .back-link:hover { color: var(--primary); text-decoration: none; }
+    .paper-header { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; margin-bottom: 32px; box-shadow: var(--shadow); }
+    .paper-header h1 { font-size: 24px; line-height: 1.4; margin-bottom: 20px; }
+    .meta-row { display: flex; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .meta-row:last-child { border-bottom: none; }
+    .meta-label { flex-shrink: 0; width: 90px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .meta-value { flex: 1; font-size: 14px; }
+    .meta-value.summary { color: var(--text-secondary); font-style: italic; }
+    .paper-links { display: flex; gap: 12px; margin-top: 20px; }
+    .btn { display: inline-block; padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; transition: all 0.2s; color: #fff; }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+    .btn-paper { background: var(--primary); }
+    .btn-code { background: #1e293b; }
+
+    .paper-content { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 32px; }
+    .paper-content h2 { font-size: 20px; margin-top: 32px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .paper-content h2:first-child { margin-top: 0; }
+    .paper-content p { margin-bottom: 12px; line-height: 1.8; }
+    .paper-content ul, .paper-content ol { margin-bottom: 12px; padding-left: 24px; }
+    .paper-content li { margin-bottom: 4px; line-height: 1.7; }
+    .paper-content strong { font-weight: 600; }
+    .paper-content blockquote { border-left: 3px solid var(--primary); padding: 8px 16px; margin: 16px 0; background: var(--primary-light); border-radius: 0 6px 6px 0; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 22px; }
+      .paper-table-wrapper { overflow-x: auto; }
+      .paper-table th, .paper-table td { padding: 10px 12px; }
+      .paper-authors { max-width: 120px; }
+      .paper-header, .paper-content { padding: 20px; }
+      .meta-row { flex-direction: column; }
+      .meta-label { width: auto; margin-bottom: 2px; }
+      .modal-content { margin: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="site-logo">Paper Reading Notes</a>
+      <nav class="site-nav">
+        <a href="#">首页</a>
+        <a href="https://github.com/Shiying-Zhang" target="_blank">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container" id="mainPage">
+    <section class="hero">
+      <h1>Paper Reading Notes</h1>
+      <p>个人论文阅读笔记归档</p>
+      <div class="stats">
+        <span class="stat-item">共 <strong>6</strong> 篇论文</span>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索论文标题、作者、标签...">
+      </div>
+      <div class="filter-group">
+        <label>标签筛选：</label>
+        <div id="tagFilters" class="tag-filters">
+          <button class="tag-btn active" data-tag="all">全部</button>
+          <button class="tag-btn" data-tag="transformer">Transformer</button>
+          <button class="tag-btn" data-tag="图像分类">图像分类</button>
+          <button class="tag-btn" data-tag="目标检测">目标检测</button>
+          <button class="tag-btn" data-tag="图像生成">图像生成</button>
+          <button class="tag-btn" data-tag="自监督学习">自监督学习</button>
+          <button class="tag-btn" data-tag="多模态">多模态</button>
+          <button class="tag-btn" data-tag="cnn">CNN</button>
+        </div>
+      </div>
+      <div class="sort-group">
+        <label>排序：</label>
+        <select id="sortSelect">
+          <option value="year-desc">年份 (新→旧)</option>
+          <option value="year-asc">年份 (旧→新)</option>
+          <option value="rating-desc">评分 (高→低)</option>
+          <option value="rating-asc">评分 (低→高)</option>
+          <option value="title-asc">标题 (A→Z)</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="paper-table-wrapper">
+      <table class="paper-table" id="paperTable">
+        <thead>
+          <tr>
+            <th>标题</th>
+            <th>作者</th>
+            <th>年份</th>
+            <th>会议/期刊</th>
+            <th>标签</th>
+            <th>评分</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="paper-row" data-id="vit"
+              data-title="an image is worth 16x16 words: transformers for image recognition at scale"
+              data-authors="alexey dosovitskiy, lucas beyer, alexander kolesnikov, et al."
+              data-year="2021" data-venue="ICLR 2021"
+              data-tags="transformer,图像分类" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('vit');return false;">An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a>
+              <div class="paper-summary">首次将纯 Transformer 架构直接应用于图像分类任务，证明无需 CNN 也能达到 SOTA</div>
+            </td>
+            <td class="paper-authors">Alexey Dosovitskiy, Lucas Beyer, et al.</td>
+            <td class="paper-year">2021</td>
+            <td class="paper-venue">ICLR 2021</td>
+            <td class="paper-tags"><span class="tag">Transformer</span><span class="tag">图像分类</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="detr"
+              data-title="end-to-end object detection with transformers (detr)"
+              data-authors="nicolas carion, francisco massa, gabriel synnaeve, et al."
+              data-year="2020" data-venue="ECCV 2020"
+              data-tags="目标检测,transformer" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('detr');return false;">End-to-End Object Detection with Transformers (DETR)</a>
+              <div class="paper-summary">首个基于 Transformer 的端到端目标检测框架，去除了 NMS 和 anchor</div>
+            </td>
+            <td class="paper-authors">Nicolas Carion, Francisco Massa, et al.</td>
+            <td class="paper-year">2020</td>
+            <td class="paper-venue">ECCV 2020</td>
+            <td class="paper-tags"><span class="tag">目标检测</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="clip"
+              data-title="learning transferable visual models from natural language supervision"
+              data-authors="alec radford, jong wook kim, chris hallacy, et al."
+              data-year="2021" data-venue="ICML 2021"
+              data-tags="多模态,自监督学习" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('clip');return false;">Learning Transferable Visual Models From Natural Language Supervision</a>
+              <div class="paper-summary">通过图文对比学习训练视觉模型，实现强大的零样本迁移能力</div>
+            </td>
+            <td class="paper-authors">Alec Radford, Jong Wook Kim, et al.</td>
+            <td class="paper-year">2021</td>
+            <td class="paper-venue">ICML 2021</td>
+            <td class="paper-tags"><span class="tag">多模态</span><span class="tag">自监督学习</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="resnet"
+              data-title="deep residual learning for image recognition"
+              data-authors="kaiming he, xiangyu zhang, shaoqing ren, jian sun"
+              data-year="2016" data-venue="CVPR 2016"
+              data-tags="cnn,图像分类" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('resnet');return false;">Deep Residual Learning for Image Recognition</a>
+              <div class="paper-summary">提出残差连接解决深层网络退化问题，成为计算机视觉领域最重要的基础架构之一</div>
+            </td>
+            <td class="paper-authors">Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</td>
+            <td class="paper-year">2016</td>
+            <td class="paper-venue">CVPR 2016</td>
+            <td class="paper-tags"><span class="tag">CNN</span><span class="tag">图像分类</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="ddpm"
+              data-title="denoising diffusion probabilistic models"
+              data-authors="jonathan ho, ajay jain, pieter abbeel"
+              data-year="2020" data-venue="NeurIPS 2020"
+              data-tags="图像生成" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('ddpm');return false;">Denoising Diffusion Probabilistic Models</a>
+              <div class="paper-summary">提出扩散概率模型用于高质量图像生成，奠定了 Diffusion Model 的基础</div>
+            </td>
+            <td class="paper-authors">Jonathan Ho, Ajay Jain, Pieter Abbeel</td>
+            <td class="paper-year">2020</td>
+            <td class="paper-venue">NeurIPS 2020</td>
+            <td class="paper-tags"><span class="tag">图像生成</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+          <tr class="paper-row" data-id="drifting"
+              data-title="generative modeling via drifting"
+              data-authors="mingyang deng, he li, tianhong li, yilun du, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,自监督学习" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('drifting');return false;">Generative Modeling via Drifting</a>
+              <div class="paper-summary">提出 Drifting Models 新范式，在训练时演化 pushforward 分布，实现单步生成，ImageNet 256×256 达到 FID 1.54</div>
+            </td>
+            <td class="paper-authors">Mingyang Deng, He Li, Tianhong Li, Yilun Du, Kaiming He</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">自监督学习</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div id="noResults" class="no-results" style="display:none;">没有找到匹配的论文</div>
+    </section>
+  </main>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="paper-detail" id="paperDetail"></div>
+    </div>
+  </div>
+
+  <footer class="container">
+    <p>&copy; 2026 Shiying-Zhang. Powered by Jekyll &amp; GitHub Pages.</p>
+  </footer>
+
+  <script>
+    // Paper detail data
+    var papers = {
+      vit: {
+        title: 'An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale',
+        authors: 'Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, et al.',
+        year: 2021, venue: 'ICLR 2021', rating: 5,
+        tags: ['Transformer', '图像分类'],
+        summary: '首次将纯 Transformer 架构直接应用于图像分类任务，证明无需 CNN 也能达到 SOTA',
+        paper_url: 'https://arxiv.org/abs/2010.11929',
+        code_url: 'https://github.com/google-research/vision_transformer',
+        content: '<h2>核心思想</h2><p>ViT 将图像切分为固定大小的 patch（如 16x16），将每个 patch 线性映射为 token，然后直接输入标准 Transformer Encoder 进行分类。这一工作证明了在大规模数据集预训练的条件下，纯 Transformer 架构可以在图像分类任务上匹配甚至超越 CNN。</p><h2>方法详解</h2><ol><li><strong>Patch Embedding</strong>：将输入图像切分为 N 个 patch，每个 patch 展平后通过线性投影映射到 D 维</li><li><strong>Position Embedding</strong>：使用可学习的 1D 位置编码</li><li><strong>[CLS] Token</strong>：在序列头部添加一个可学习的分类 token</li><li><strong>Transformer Encoder</strong>：标准的多头自注意力 + FFN 结构</li><li><strong>分类头</strong>：取 [CLS] token 的输出接 MLP Head</li></ol><h2>实验结果</h2><ul><li>在 JFT-300M 上预训练后，ViT-L/16 在 ImageNet 上达到 <strong>87.76%</strong> top-1 准确率</li><li>在中小规模数据集上，ViT 表现不如 CNN（缺乏归纳偏置）</li><li>预训练数据量越大，ViT 的优势越明显</li></ul><h2>个人思考</h2><ul><li>ViT 的成功关键在于大规模预训练，这体现了 Transformer 的 scaling law</li><li>Patch 大小是一个关键超参数，直接影响计算量和性能</li><li>后续 DeiT 证明了通过蒸馏可以在 ImageNet-1K 上高效训练 ViT</li></ul>'
+      },
+      detr: {
+        title: 'End-to-End Object Detection with Transformers (DETR)',
+        authors: 'Nicolas Carion, Francisco Massa, Gabriel Synnaeve, et al.',
+        year: 2020, venue: 'ECCV 2020', rating: 4,
+        tags: ['目标检测', 'Transformer'],
+        summary: '首个基于 Transformer 的端到端目标检测框架，去除了 NMS 和 anchor 等手工设计组件',
+        paper_url: 'https://arxiv.org/abs/2005.12872',
+        code_url: 'https://github.com/facebookresearch/detr',
+        content: '<h2>核心思想</h2><p>DETR 提出了一种全新的目标检测范式：将目标检测建模为集合预测问题，使用 Transformer 的 encoder-decoder 架构直接输出固定数量的预测结果，并通过匈牙利算法进行二分图匹配计算损失。</p><h2>方法详解</h2><ol><li><strong>CNN Backbone</strong>：使用 ResNet 提取特征图</li><li><strong>Transformer Encoder</strong>：对特征图进行全局自注意力建模</li><li><strong>Transformer Decoder</strong>：使用 N 个可学习的 object queries 与编码特征交互</li><li><strong>预测头</strong>：每个 query 输出一个类别 + 边界框</li><li><strong>匈牙利匹配</strong>：将预测与 GT 进行最优二分图匹配</li></ol><h2>实验结果</h2><ul><li>在 COCO 上达到与 Faster R-CNN 相当的性能（~42 AP）</li><li>在大物体检测上表现优异</li><li>小物体检测表现偏弱</li><li>训练收敛慢（需要 500 epochs）</li></ul><h2>个人思考</h2><ul><li>DETR 最大的贡献是简化了检测流程</li><li>训练收敛慢是主要缺陷，Deformable DETR 通过可变形注意力大幅改善</li><li>Object query 的物理含义值得深入研究</li></ul>'
+      },
+      clip: {
+        title: 'Learning Transferable Visual Models From Natural Language Supervision',
+        authors: 'Alec Radford, Jong Wook Kim, Chris Hallacy, et al.',
+        year: 2021, venue: 'ICML 2021', rating: 5,
+        tags: ['多模态', '自监督学习'],
+        summary: '通过图文对比学习训练视觉模型，实现强大的零样本迁移能力',
+        paper_url: 'https://arxiv.org/abs/2103.00020',
+        code_url: 'https://github.com/openai/CLIP',
+        content: '<h2>核心思想</h2><p>CLIP（Contrastive Language-Image Pre-training）通过在 4 亿图文对上进行对比学习，让图像编码器和文本编码器学习对齐的表示空间。训练完成后，模型可以通过自然语言描述进行零样本图像分类，无需任何标注数据微调。</p><h2>方法详解</h2><ol><li><strong>双编码器架构</strong>：图像编码器（ResNet 或 ViT）+ 文本编码器（Transformer）</li><li><strong>对比学习</strong>：在 batch 内最大化匹配图文对的相似度，最小化不匹配对的相似度</li><li><strong>零样本推理</strong>：将类别名构造为文本 prompt，计算图像与所有类别文本的相似度</li></ol><h2>实验结果</h2><ul><li>在 30 多个数据集上展现了强大的零样本迁移能力</li><li>零样本 CLIP 在 ImageNet 上达到 76.2%，匹配 ResNet-50 的有监督性能</li><li>对分布偏移具有更好的鲁棒性</li></ul><h2>个人思考</h2><ul><li>CLIP 证明了自然语言监督信号的巨大潜力</li><li>Prompt engineering 对零样本性能影响很大</li><li>CLIP 的视觉表示已成为下游多模态任务的标准基础</li></ul>'
+      },
+      resnet: {
+        title: 'Deep Residual Learning for Image Recognition',
+        authors: 'Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun',
+        year: 2016, venue: 'CVPR 2016', rating: 5,
+        tags: ['CNN', '图像分类'],
+        summary: '提出残差连接解决深层网络退化问题，成为计算机视觉领域最重要的基础架构之一',
+        paper_url: 'https://arxiv.org/abs/1512.03385',
+        code_url: 'https://github.com/KaimingHe/deep-residual-networks',
+        content: '<h2>核心思想</h2><p>ResNet 提出了残差学习（Residual Learning）框架，通过引入跳跃连接（skip connection），让网络学习残差映射 F(x) = H(x) - x 而非直接学习目标映射 H(x)。这使得训练极深的网络（100+ 层）成为可能，从根本上解决了深度网络的退化问题。</p><h2>方法详解</h2><ol><li><strong>残差块</strong>：y = F(x, {W_i}) + x，其中 F 是残差映射</li><li><strong>Bottleneck 设计</strong>：1x1 → 3x3 → 1x1 卷积结构，减少计算量</li><li><strong>多种深度</strong>：ResNet-18/34/50/101/152</li></ol><h2>实验结果</h2><ul><li>ResNet-152 在 ImageNet 上取得 3.57% top-5 错误率，赢得 ILSVRC 2015 冠军</li><li>首次成功训练超过 100 层的网络</li><li>在检测和分割任务上同样带来显著提升</li></ul><h2>个人思考</h2><ul><li>残差连接是深度学习最重要的架构创新之一</li><li>简单而优雅的设计，影响了后续几乎所有的网络架构</li><li>至今仍是许多任务的默认 backbone</li></ul>'
+      },
+      ddpm: {
+        title: 'Denoising Diffusion Probabilistic Models',
+        authors: 'Jonathan Ho, Ajay Jain, Pieter Abbeel',
+        year: 2020, venue: 'NeurIPS 2020', rating: 4,
+        tags: ['图像生成'],
+        summary: '提出扩散概率模型用于高质量图像生成，奠定了 Diffusion Model 的基础',
+        paper_url: 'https://arxiv.org/abs/2006.11239',
+        code_url: 'https://github.com/hojonathanho/diffusion',
+        content: '<h2>核心思想</h2><p>DDPM 通过两个过程实现图像生成：前向过程逐步向数据添加高斯噪声直到变为纯噪声，反向过程通过学习去噪逐步从纯噪声恢复出清晰图像。模型训练的目标是预测每一步添加的噪声。</p><h2>方法详解</h2><ol><li><strong>前向过程</strong>：q(x_t | x_{t-1}) = N(x_t; √(1-β_t) x_{t-1}, β_t I)，逐步加噪</li><li><strong>反向过程</strong>：p_θ(x_{t-1} | x_t)，用神经网络参数化去噪过程</li><li><strong>训练目标</strong>：简化为预测噪声 ε，L = ||ε - ε_θ(x_t, t)||²</li><li><strong>采样</strong>：从 x_T ~ N(0, I) 开始，逐步去噪得到 x_0</li></ol><h2>实验结果</h2><ul><li>在 CIFAR-10 上达到 FID 3.17，超越当时的 GAN 方法</li><li>生成的图像质量高，多样性好</li><li>采样速度慢（需要 1000 步），后续 DDIM 改进了这一问题</li></ul><h2>个人思考</h2><ul><li>DDPM 开启了 Diffusion Model 时代</li><li>与 GAN 相比，训练更稳定，不存在模式崩塌问题</li><li>后续 Stable Diffusion、DALL-E 等都建立在这一基础上</li></ul>'
+      }
+    };
+
+    papers.drifting = {
+        title: 'Generative Modeling via Drifting',
+        authors: 'Mingyang Deng, He Li, Tianhong Li, Yilun Du, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['图像生成', '自监督学习'],
+        summary: '提出 Drifting Models 新范式，在训练时演化 pushforward 分布，实现单步生成，ImageNet 256×256 达到 FID 1.54',
+        paper_url: 'https://arxiv.org/abs/2602.04770',
+        code_url: '',
+        content: '<h2>核心思想</h2>' +
+          '<p>传统扩散/流模型在<strong>推理时</strong>迭代演化分布（需要多步 NFE），而本文提出了全新范式 <strong>Drifting Models</strong>：在<strong>训练时</strong>演化 pushforward 分布，推理时只需<strong>单步前向传播</strong>。</p>' +
+          '<p>核心直觉：定义一个 drifting field V 来控制生成样本的移动方向，当生成分布 q 与数据分布 p 匹配时，drifting field 达到平衡（V=0）。</p>' +
+          '<img src="https://arxiv.org/html/2602.04770v1/extracted_media/figures/teaser_main.png" style="max-width:100%;border-radius:8px;margin:16px 0;" alt="Teaser: 网络 f 将先验分布映射为数据分布">' +
+
+          '<h2>方法详解</h2>' +
+
+          '<h3>1. Pushforward 分布：问题建模</h3>' +
+          '<p>生成模型的核心是学习映射 f，使其 pushforward 分布匹配数据分布：</p>' +
+          '<blockquote><strong>公式 (1)：</strong> q = f<sub>#</sub> p<sub>ε</sub></blockquote>' +
+          '<p>其中 p<sub>ε</sub> 为先验分布（标准高斯），f<sub>#</sub> 表示 f 诱导的 pushforward 操作。训练过程产生参数序列 {θ<sub>i</sub>}，对应生成分布序列 {q<sub>i</sub>}，其中 q<sub>i</sub> = [f<sub>θ<sub>i</sub></sub>]<sub>#</sub> p<sub>ε</sub>。</p>' +
+          '<p><strong>与扩散模型的本质区别：</strong>扩散模型在推理时通过多步迭代演化分布（q<sub>0</sub> → q<sub>1</sub> → ⋯ → q<sub>T</sub>），而 Drifting Models 将这种演化放到训练过程中，推理时只需单步 x = f<sub>θ</sub>(ε)。</p>' +
+
+          '<h3>2. Drifting Field：核心定义</h3>' +
+          '<p>训练迭代中，生成样本 x<sub>i</sub> = f<sub>θ<sub>i</sub></sub>(ε) 按以下规则漂移：</p>' +
+          '<blockquote><strong>公式 (2)：</strong> x<sub>i+1</sub> = x<sub>i</sub> + V<sub>p, q<sub>i</sub></sub>(x<sub>i</sub>)</blockquote>' +
+          '<p>其中 V<sub>p,q</sub>: ℝ<sup>d</sup> → ℝ<sup>d</sup> 为 drifting field，下标 p, q 表示它同时依赖数据分布 p 和当前生成分布 q。</p>' +
+          '<img src="https://arxiv.org/html/2602.04770v1/extracted_media/figures/drift_field.png" style="max-width:100%;border-radius:8px;margin:16px 0;" alt="Drifting 示意图">' +
+
+          '<h4>反对称性（Proposition 3.1）</h4>' +
+          '<blockquote><strong>公式 (3)：</strong> V<sub>p,q</sub>(x) = −V<sub>q,p</sub>(x), &nbsp; ∀x</blockquote>' +
+          '<p><strong>为什么需要反对称性？</strong> 当 q = p 时：V<sub>p,p</sub>(x) = −V<sub>p,p</sub>(x) ⟹ V<sub>p,p</sub>(x) = 0。即达到<strong>平衡状态</strong>，样本不再漂移，保证训练收敛。</p>' +
+
+          '<h3>3. Drifting Field 的具体构造</h3>' +
+          '<h4>3.1 Kernel 形式</h4>' +
+          '<blockquote><strong>公式 (7)：</strong> V<sub>p,q</sub>(x) = 𝔼<sub>y⁺∼p</sub> 𝔼<sub>y⁻∼q</sub> [𝒦(x, y⁺, y⁻)]</blockquote>' +
+          '<p>其中 y⁺ 是数据样本（正样本），y⁻ 是生成样本（负样本）。</p>' +
+
+          '<h4>3.2 分解为吸引项与排斥项</h4>' +
+          '<blockquote><strong>公式 (10)：</strong> V<sub>p,q</sub>(x) = V<sub>p</sub><sup>+</sup>(x) − V<sub>q</sub><sup>−</sup>(x)</blockquote>' +
+          '<p>其中：</p>' +
+          '<blockquote><strong>公式 (8a) 吸引项：</strong> V<sub>p</sub><sup>+</sup>(x) := (1/Z<sub>p</sub>) 𝔼<sub>y⁺∼p</sub> [k(x, y⁺)(y⁺ − x)]</blockquote>' +
+          '<blockquote><strong>公式 (8b) 排斥项：</strong> V<sub>q</sub><sup>−</sup>(x) := (1/Z<sub>q</sub>) 𝔼<sub>y⁻∼q</sub> [k(x, y⁻)(y⁻ − x)]</blockquote>' +
+          '<p>归一化因子：</p>' +
+          '<blockquote><strong>公式 (9)：</strong> Z<sub>p</sub>(x) := 𝔼<sub>y⁺∼p</sub>[k(x, y⁺)], &nbsp; Z<sub>q</sub>(x) := 𝔼<sub>y⁻∼q</sub>[k(x, y⁻)]</blockquote>' +
+          '<p><strong>直觉理解：</strong></p>' +
+          '<ul><li><strong>V<sup>+</sup>(x)</strong>：将 x 拉向附近的真实数据点 y⁺，kernel 越近权重越大</li>' +
+          '<li><strong>V<sup>−</sup>(x)</strong>：将 x 推离附近的生成样本 y⁻，防止模式崩塌</li>' +
+          '<li>两项相减 → 生成样本既向数据聚拢，又彼此散开</li></ul>' +
+
+          '<h4>3.3 展开形式</h4>' +
+          '<p>将公式 (8a)(8b) 代入 (10)：</p>' +
+          '<blockquote><strong>公式 (11)：</strong> V<sub>p,q</sub>(x) = (1 / Z<sub>p</sub>·Z<sub>q</sub>) 𝔼<sub>y⁺∼p, y⁻∼q</sub> [k(x, y⁺) · k(x, y⁻) · (y⁺ − y⁻)]</blockquote>' +
+          '<p><strong>反对称性验证：</strong>交换 p↔q（即 y⁺↔y⁻），(y⁺−y⁻) 变号 → V<sub>p,q</sub> = −V<sub>q,p</sub> ✓</p>' +
+
+          '<h4>3.4 Kernel 函数</h4>' +
+          '<blockquote><strong>公式 (12)：</strong> k(x, y) = exp(−(1/τ) ‖x − y‖)</blockquote>' +
+          '<p>其中 τ 为温度参数。归一化通过 softmax 实现：k̃(x, y) = softmax(−(1/τ)‖x − y‖)。</p>' +
+
+          '<h3>4. 训练目标推导</h3>' +
+          '<h4>4.1 固定点条件</h4>' +
+          '<p>当训练收敛（q<sub>θ̂</sub> ≈ p）时，V = 0，得到固定点：</p>' +
+          '<blockquote><strong>公式 (4)：</strong> f<sub>θ̂</sub>(ε) = f<sub>θ̂</sub>(ε) + V<sub>p, q<sub>θ̂</sub></sub>(f<sub>θ̂</sub>(ε))</blockquote>' +
+
+          '<h4>4.2 迭代更新</h4>' +
+          '<p>根据公式 (2)，训练时第 i 步到第 i+1 步的更新：</p>' +
+          '<blockquote><strong>公式 (5)：</strong> f<sub>θ<sub>i+1</sub></sub>(ε) ← f<sub>θ<sub>i</sub></sub>(ε) + V<sub>p, q<sub>θ<sub>i</sub></sub></sub>(f<sub>θ<sub>i</sub></sub>(ε))</blockquote>' +
+          '<p>即网络的目标输出是「当前输出 + 漂移量」。</p>' +
+
+          '<h4>4.3 Loss 函数（核心公式）</h4>' +
+          '<p>将公式 (5) 转化为回归损失，用 <strong>stop gradient</strong> 冻结目标端：</p>' +
+          '<blockquote style="background:#e8f4fd;border-left:4px solid #2563eb;padding:16px;"><strong>公式 (6)：</strong> ℒ = 𝔼<sub>ε</sub> [ ‖ f<sub>θ</sub>(ε) − stopgrad( f<sub>θ</sub>(ε) + V<sub>p,q<sub>θ</sub></sub>(f<sub>θ</sub>(ε)) ) ‖² ]</blockquote>' +
+          '<p><strong>公式之间的联系：</strong></p>' +
+          '<ul><li>公式 (6) 的最优解满足公式 (4) 的固定点条件</li>' +
+          '<li>stopgrad 使得右侧 f<sub>θ</sub>(ε)+V 被视为常量目标，梯度只通过左侧 f<sub>θ</sub> 反传</li>' +
+          '<li>展开后等价于 ℒ = 𝔼[‖V(f<sub>θ</sub>(ε))‖²]，即<strong>最小化漂移量 → 趋向平衡</strong></li>' +
+          '<li>SGD 天然实现了公式 (5) 的迭代演化，无需显式定义 ODE/SDE</li></ul>' +
+
+          '<h3>5. 特征空间扩展</h3>' +
+          '<p>直接在像素空间计算 V 效果有限，扩展到预训练编码器的特征空间：</p>' +
+          '<blockquote><strong>公式 (13)：</strong> ℒ<sub>feat</sub> = 𝔼<sub>ε</sub> [ ‖φ(x) − stopgrad(φ(x) + V(φ(x)))‖² ]</blockquote>' +
+          '<p>其中 φ 为预训练编码器（MAE / MoCo / SimCLR），V 中的 k(·,·) 和 (y⁺−x) 都在特征空间中计算。</p>' +
+          '<p>多尺度版本——从编码器不同层提取特征并求和：</p>' +
+          '<blockquote><strong>公式 (14)：</strong> ℒ<sub>multi</sub> = Σ<sub>j</sub> 𝔼<sub>ε</sub> [ ‖φ<sub>j</sub>(x) − stopgrad(φ<sub>j</sub>(x) + V(φ<sub>j</sub>(x)))‖² ]</blockquote>' +
+          '<p>使模型同时优化低层纹理和高层语义。</p>' +
+
+          '<h3>6. Classifier-Free Guidance (CFG)</h3>' +
+          '<p>通过修改负样本分布实现条件引导：</p>' +
+          '<blockquote><strong>公式 (15)：</strong> q̃(·|c) := (1−γ) q<sub>θ</sub>(·|c) + γ p<sub>data</sub>(·|∅)</blockquote>' +
+          '<p>等价优化目标：</p>' +
+          '<blockquote><strong>公式 (16)：</strong> q<sub>θ</sub>(·|c) = α p<sub>data</sub>(·|c) − (α−1) p<sub>data</sub>(·|∅), &nbsp; α = 1/(1−γ) ≥ 1</blockquote>' +
+          '<p>α 控制条件引导强度：α=1 退化为无引导，α>1 增强类别条件信号。</p>' +
+
+          '<h3>7. 训练算法伪代码</h3>' +
+          '<pre style="background:#f1f5f9;padding:16px;border-radius:8px;font-size:13px;overflow-x:auto;line-height:1.6;">' +
+          '输入：生成器 f_θ，预训练编码器 φ，数据集 D\n' +
+          '每个训练迭代：\n' +
+          '  1. 采样噪声 ε ~ p_ε\n' +
+          '  2. 生成样本 x = f_θ(ε)\n' +
+          '  3. 采样正样本 y⁺ ~ p_data（N_pos 个）\n' +
+          '  4. 负样本 y⁻ = x（重用生成样本）\n' +
+          '  5. 提取特征 φ(x), φ(y⁺), φ(y⁻)\n' +
+          '  6. 计算 kernel: k(φ(x), φ(y⁺)), k(φ(x), φ(y⁻))  ← 公式(12)\n' +
+          '  7. 计算吸引项 V⁺ 和排斥项 V⁻                      ← 公式(8a)(8b)\n' +
+          '  8. 合成 V = V⁺ − V⁻                                ← 公式(10)\n' +
+          '  9. 冻结目标 x_target = stopgrad(φ(x) + V)\n' +
+          '  10. 损失 ℒ = ‖φ(x) − x_target‖²                   ← 公式(6/13)\n' +
+          '  11. 反向传播更新 θ\n\n' +
+          '推理（1-NFE）：ε ~ p_ε → x = f_θ(ε) → 输出 x</pre>' +
+
+          '<h2>实验结果</h2>' +
+          '<p><strong>ImageNet 256×256 主要结果：</strong></p>' +
+          '<table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;">' +
+          '<tr style="background:#f1f5f9;"><th style="padding:8px 12px;text-align:left;border-bottom:1px solid #e2e8f0;">方法</th><th style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">空间</th><th style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">NFE</th><th style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">FID ↓</th></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Drifting (本文)</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Latent</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1.54</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Drifting (本文)</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Pixel</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1.61</td></tr>' +
+          '<tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">DMD2</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Latent</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1.28</td></tr>' +
+          '<tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">SiD-LSG</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Latent</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1.38</td></tr>' +
+          '<tr><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">REPA</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">Latent</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">250</td><td style="padding:8px 12px;border-bottom:1px solid #e2e8f0;">1.42</td></tr>' +
+          '<tr><td style="padding:8px 12px;">DiT-XL/2</td><td style="padding:8px 12px;">Latent</td><td style="padding:8px 12px;">250</td><td style="padding:8px 12px;">2.27</td></tr>' +
+          '</table>' +
+          '<ul><li>单步生成中 <strong>pixel space SOTA</strong>（FID 1.61），大幅超越此前像素空间方法</li>' +
+          '<li>Latent space FID 1.54，与蒸馏方法接近，但<strong>无需预训练教师模型</strong></li></ul>' +
+          '<p><strong>消融实验关键发现：</strong></p>' +
+          '<ul><li>反对称性至关重要：去掉排斥项 FID 飙升到 41~177</li>' +
+          '<li>特征编码器质量影响很大：latent-MAE width=640 达到 FID 3.36</li>' +
+          '<li>正/负样本数越多效果越好</li></ul>' +
+          '<img src="https://arxiv.org/html/2602.04770v1/extracted_media/figures/dynamics_comparison.png" style="max-width:100%;border-radius:8px;margin:16px 0;" alt="训练过程中生成分布演化">' +
+          '<p><strong>机器人操控任务：</strong>单步 Drifting 匹配甚至超越 100 步 Diffusion Policy。</p>' +
+
+          '<h2>个人思考</h2>' +
+          '<ul><li><strong>范式创新</strong>：将迭代从推理时移到训练时，非常优雅的 reformulation</li>' +
+          '<li><strong>与对比学习的联系</strong>：吸引-排斥机制与对比学习异曲同工</li>' +
+          '<li><strong>无需教师模型</strong>：从头训练，不依赖预训练多步扩散模型</li>' +
+          '<li><strong>实用价值</strong>：单步生成对实时应用（如机器人控制）极有价值</li>' +
+          '<li><strong>潜在局限</strong>：训练时需维护生成样本集合并计算 drifting field，可能带来额外开销</li></ul>'
+      };
+
+    // Show detail
+    function showDetail(id) {
+      var p = papers[id];
+      if (!p) return;
+      var stars = '';
+      for (var i = 1; i <= 5; i++) {
+        stars += '<span class="star' + (i <= p.rating ? ' filled' : '') + '">&#9733;</span>';
+      }
+      var tagsHtml = p.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join(' ');
+
+      var html = '<a class="back-link" onclick="hideDetail()">&larr; 返回列表</a>' +
+        '<div class="paper-header"><h1>' + p.title + '</h1>' +
+        '<div class="paper-meta">' +
+        '<div class="meta-row"><span class="meta-label">作者</span><span class="meta-value">' + p.authors + '</span></div>' +
+        '<div class="meta-row"><span class="meta-label">年份</span><span class="meta-value">' + p.year + '</span></div>' +
+        '<div class="meta-row"><span class="meta-label">会议/期刊</span><span class="meta-value">' + p.venue + '</span></div>' +
+        '<div class="meta-row"><span class="meta-label">评分</span><span class="meta-value">' + stars + '</span></div>' +
+        '<div class="meta-row"><span class="meta-label">标签</span><span class="meta-value">' + tagsHtml + '</span></div>' +
+        '<div class="meta-row"><span class="meta-label">摘要</span><span class="meta-value summary">' + p.summary + '</span></div>' +
+        '</div>' +
+        '<div class="paper-links">' +
+        (p.paper_url ? '<a href="' + p.paper_url + '" target="_blank" class="btn btn-paper">论文原文</a>' : '') +
+        (p.code_url ? '<a href="' + p.code_url + '" target="_blank" class="btn btn-code">代码仓库</a>' : '') +
+        '</div></div>' +
+        '<div class="paper-content">' + p.content + '</div>' +
+        '<a class="back-link" onclick="hideDetail()">&larr; 返回列表</a>';
+
+      document.getElementById('paperDetail').innerHTML = html;
+      document.getElementById('modalOverlay').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideDetail() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) hideDetail();
+    });
+
+    // Search, filter, sort
+    (function() {
+      var searchInput = document.getElementById('searchInput');
+      var tagButtons = document.querySelectorAll('.tag-btn');
+      var sortSelect = document.getElementById('sortSelect');
+      var tableBody = document.querySelector('#paperTable tbody');
+      var noResults = document.getElementById('noResults');
+      var activeTag = 'all';
+
+      searchInput.addEventListener('input', applyFilters);
+      tagButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          tagButtons.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeTag = btn.getAttribute('data-tag');
+          applyFilters();
+        });
+      });
+      sortSelect.addEventListener('change', applyFilters);
+
+      function applyFilters() {
+        var keyword = searchInput.value.toLowerCase().trim();
+        var rows = Array.from(tableBody.querySelectorAll('.paper-row'));
+        var visibleCount = 0;
+
+        rows.forEach(function(row) {
+          var title = row.getAttribute('data-title') || '';
+          var authors = row.getAttribute('data-authors') || '';
+          var tags = row.getAttribute('data-tags') || '';
+          var venue = (row.getAttribute('data-venue') || '').toLowerCase();
+          var matchKeyword = !keyword || title.indexOf(keyword) !== -1 || authors.indexOf(keyword) !== -1 || tags.indexOf(keyword) !== -1 || venue.indexOf(keyword) !== -1;
+          var matchTag = activeTag === 'all' || tags.indexOf(activeTag.toLowerCase()) !== -1;
+          if (matchKeyword && matchTag) { row.style.display = ''; visibleCount++; } else { row.style.display = 'none'; }
+        });
+
+        var sortValue = sortSelect.value;
+        rows.slice().sort(function(a, b) {
+          switch(sortValue) {
+            case 'year-desc': return parseInt(b.getAttribute('data-year')) - parseInt(a.getAttribute('data-year'));
+            case 'year-asc': return parseInt(a.getAttribute('data-year')) - parseInt(b.getAttribute('data-year'));
+            case 'rating-desc': return parseInt(b.getAttribute('data-rating')) - parseInt(a.getAttribute('data-rating'));
+            case 'rating-asc': return parseInt(a.getAttribute('data-rating')) - parseInt(b.getAttribute('data-rating'));
+            case 'title-asc': return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
+            default: return 0;
+          }
+        }).forEach(function(row) { tableBody.appendChild(row); });
+
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    })();
+  </script>
+</body>
+</html>
