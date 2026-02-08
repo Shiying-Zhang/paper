@@ -54,11 +54,20 @@ $$\bar{P}_\theta(y_i | Q, R_{1:K}, y_{<i}) = \text{softmax}(\bar{z}_i)[y_i]$$
 
 ### 4. 为什么是 logit 合并而非概率合并
 
-$$\text{Logit 合并}: \quad \bar{z}_i = \frac{1}{K}\sum_k z_i^{(k)} \xrightarrow{\text{softmax}} P$$
+$$\text{Logit 合并}: \quad \bar{z}_i = \frac{1}{K}\sum_k z_i^{(k)} \xrightarrow{\text{softmax}} \bar{P}$$
 
 $$\text{概率合并}: \quad \bar{P} = \frac{1}{K}\sum_k \text{softmax}(z_i^{(k)})$$
 
-Logit 合并更好，因为它与标准采样技术（top-k, top-p）兼容——对 logits 做 top-k 裁剪后再 softmax 比在概率上做更合理。
+**数学区别**：Logit 平均等价于 softmax 后的**几何平均**（再归一化）：
+
+$$\bar{P}(y_i) \propto \prod_k P_k(y_i)^{1/K}$$
+
+这是 **Product of Experts** 模型——每条推理链作为一个"专家"，最终分布集中在**所有专家都同意**的 token 上。而概率平均是 **Mixture of Experts**——最终分布是各专家的混合，可能保留不一致的模式。
+
+**实用优势**：
+1. Logit 空间操作与 top-k/top-p 采样兼容——先裁剪 logits 再 softmax 是标准流程
+2. 概率空间平均后再做 top-k 采样会不自然（概率已经被"平滑"了）
+3. AIME 上 **+8.6%** 的差距（78.0% vs 69.4%）验证了 Product of Experts 在推理中优于 Mixture of Experts
 
 ## 实验结果
 

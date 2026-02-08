@@ -45,14 +45,38 @@ summary: "下一事件预测（NEP）自监督任务增强视频时序推理：�
 
 ### 3. 训练策略
 
-四种方法对比：
+#### 3.1 模型架构
+
+编码器-解码器架构（LLaVA 风格）：
+- **视觉编码器** $E$：提取帧特征，每个视频默认 32 帧
+- **语言解码器** $D$：cross-attention 到视觉嵌入，通过语言建模损失生成文本
+
+**SFT 训练目标**（标准自回归交叉熵）：
+
+$$\mathcal{L}_\text{SFT} = -\sum_{j=1}^{|Y|} \log P_\theta(y_j | V_{\leq t}, y_{<j})$$
+
+其中 $V_{\leq t}$ 为过去帧，$Y = (y_1, \ldots, y_{|Y|})$ 为未来事件的文本描述（由未来帧生成）。
+
+#### 3.2 四种训练方法
 
 | 策略 | 描述 |
 |------|------|
-| **SFT** | 标准交叉熵损失，直接模仿地面真值 |
-| **CFT** | 学习 GPT-4 的批评反馈而非直接模仿 |
-| **Distill** | 从 DeepSeek-R1 的推理轨迹蒸馏 |
+| **SFT** | 标准交叉熵损失，直接模仿地面真值描述 |
+| **CFT** | 学习 GPT-4 的批评反馈（"你的预测哪里对/错"）而非直接模仿 |
+| **Distill** | 模仿 DeepSeek-R1 的推理轨迹（包含思考过程） |
 | **Mix** | 每个 epoch 等比例混合 SFT + CFT + Distill |
+
+**CFT 的思路**：模型先尝试预测，GPT-4 评判预测质量并给出改进建议，模型学习这些建议——类似"做题 + 批改"的循环。
+
+**Distill 的思路**：直接学习 DeepSeek-R1 的推理链（含 `<think>` 标签），而非仅学习最终答案。
+
+#### 3.3 GRPO 强化学习
+
+在 FutureBench 的多选 QA 上训练：
+
+$$\mathcal{L}_\text{GRPO} = -\mathbb{E}_{o \sim \pi_\theta}\left[\hat{A}(o) \cdot \log \pi_\theta(o | V_{\leq t}, q)\right]$$
+
+其中 $\hat{A}(o)$ 为 group-relative 优势估计，$q$ 为问题，奖励为选择正确选项（可验证）。
 
 ### 4. FutureBench 评估基准
 

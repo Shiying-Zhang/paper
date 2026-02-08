@@ -22,26 +22,45 @@ DeepSeek-R1-Zero 风格的 RL 训练依赖**验证器**（rule-based 或 model-b
 
 #### 1.1 原始验证器目标
 
-标准 RL 训练目标：在采样的推理链 $z$ 和答案 $y$ 上，用二元正确性信号 $\mathbf{1}(y \in Y_x)$ 作为奖励。
+标准 RL 目标是最大化期望奖励：
+
+$$\mathcal{J}(\theta) = \mathbb{E}_{z \sim \pi_\theta(z|x), y \sim \pi_\theta(y|x,z)}[\mathbf{1}(y \in Y_x)]$$
+
+其策略梯度需要：(1) 采样推理链 $z$，(2) 采样答案 $y$，(3) 用验证器检查 $\mathbf{1}(y \in Y_x)$。步骤 (3) 在通用推理中不可行。
 
 #### 1.2 VeriFree 变换
 
-**关键假设**：单一正确答案（$|Y_x| = 1$）。在此假设下，可以将答案采样**解析边际化**：
+**关键假设**：$|Y_x| = 1$，即正确答案唯一，记为 $y^*$。
 
-不再采样答案再验证，而是直接计算模型对参考答案 $y^*$ 的**条件概率** $\pi_\theta(y^* | x, z)$ 作为连续奖励。
+**边际化推导**：将答案采样解析积分掉：
 
-**等价性**：在唯一正确答案假设下，VeriFree 目标与原始验证器目标**精确等价**，同时方差更低。
+$$\mathcal{J}(\theta) = \mathbb{E}_{z \sim \pi_\theta(z|x)}\left[\sum_y \pi_\theta(y|x,z) \cdot \mathbf{1}(y = y^*)\right] = \mathbb{E}_{z \sim \pi_\theta(z|x)}[\pi_\theta(y^*|x,z)]$$
+
+不再需要采样 $y$ 再验证，直接计算模型对 $y^*$ 的**条件概率**作为连续奖励。
+
+**等价性证明**：在 $|Y_x|=1$ 下，$\mathbb{E}_y[\mathbf{1}(y=y^*)] = \pi_\theta(y^*|x,z)$——精确等价，无近似。
 
 ### 2. 梯度估计
 
-实际梯度包含两项：
+对 $\mathcal{J}(\theta)$ 求梯度，利用 $\nabla_\theta [\pi_\theta(z|x) \cdot \pi_\theta(y^*|x,z)] = \nabla_\theta \pi_\theta(z, y^*|x)$：
 
-$$\nabla_\theta \mathcal{L}_\text{VeriFree} = \underbrace{\text{推理项}}_{\text{策略梯度加权答案置信度}} + \underbrace{\text{参考答案项}}_{\text{监督学习加权边际奖励}} \tag{7}$$
+$$\nabla_\theta \mathcal{J} = \mathbb{E}_{z \sim \pi_\theta(z|x)}\left[\pi_\theta(y^*|x,z) \nabla_\theta \log \pi_\theta(z|x) + \nabla_\theta \log \pi_\theta(y^*|x,z) \cdot \pi_\theta(y^*|x,z)\right]$$
 
-- **推理项**：对推理链的策略梯度，权重为该推理链导向正确答案的置信度
-- **参考答案项**：对参考答案的监督学习损失，权重为边际奖励
+整理后得到两项：
 
-结合 **RLOO**（Leave-One-Out）方差减少和**响应长度归一化**。
+$$\nabla_\theta \mathcal{L}_\text{VeriFree} = \underbrace{\mathbb{E}_z\left[\pi_\theta(y^*|x,z) \cdot \nabla_\theta \log \pi_\theta(z|x)\right]}_{\text{推理项：策略梯度，权重=答案置信度}} + \underbrace{\mathbb{E}_z\left[\pi_\theta(y^*|x,z) \cdot \nabla_\theta \log \pi_\theta(y^*|x,z)\right]}_{\text{答案项：监督学习，权重=答案置信度}} \tag{7}$$
+
+**推理项的直觉**：高置信度的推理链（$\pi_\theta(y^*|x,z)$ 大）获得更大梯度权重——强化"想对了"的推理路径。
+
+**答案项的直觉**：在好的推理链上加强对正确答案的生成能力——类似于条件 SFT，但权重由模型自身置信度决定（而非均匀加权）。
+
+**与 JLB/LaTRO 的关键区别**：它们在答案项上使用均匀权重，可能强化与低质量推理链配对的答案——实际上是在不相关的推理上训练答案生成。
+
+实际实现中结合 **RLOO**（Leave-One-Out）方差减少：
+
+$$\text{baseline}_k = \frac{1}{K-1}\sum_{j \neq k} \pi_\theta(y^*|x,z_j)$$
+
+以及**响应长度归一化**防止长回复被系统性低估。
 
 ### 3. 方差减少
 
