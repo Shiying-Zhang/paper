@@ -138,7 +138,7 @@
       <h1>Paper Reading Notes</h1>
       <p>个人论文阅读笔记归档</p>
       <div class="stats">
-        <span class="stat-item">共 <strong>6</strong> 篇论文</span>
+        <span class="stat-item">共 <strong>10</strong> 篇论文</span>
       </div>
     </section>
 
@@ -288,6 +288,78 @@
             <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">自监督学习</span></td>
             <td class="paper-rating">
               <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="pmf"
+              data-title="one-step latent-free image generation with pixel mean flows"
+              data-authors="yiyang lu, susie lu, qiao sun, hanhong zhao, zhicheng jiang, xianbang wang, tianhong li, zhengyang geng, kaiming he"
+              data-year="2025" data-venue="ICML 2025"
+              data-tags="图像生成,transformer" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('pmf');return false;">One-step Latent-free Image Generation with Pixel Mean Flows</a>
+              <div class="paper-summary">分离预测空间与损失空间，实现单步无潜在空间图像生成，ImageNet 256×256 FID 2.22</div>
+            </td>
+            <td class="paper-authors">Yiyang Lu, Susie Lu, Qiao Sun, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">ICML 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="biflow"
+              data-title="bidirectional normalizing flow: from data to noise and back"
+              data-authors="yiyang lu, qiao sun, xianbang wang, zhicheng jiang, hanhong zhao, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,transformer" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('biflow');return false;">Bidirectional Normalizing Flow: From Data to Noise and Back</a>
+              <div class="paper-summary">用可学习反向模型替代精确解析逆，相比因果解码加速 100 倍，NF 方法 SOTA</div>
+            </td>
+            <td class="paper-authors">Yiyang Lu, Qiao Sun, Xianbang Wang, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="imf"
+              data-title="improved mean flows: on the challenges of fastforward generative models"
+              data-authors="zhengyang geng, yiyang lu, zongze wu, eli shechtman, j. zico kolter, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,transformer" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('imf');return false;">Improved Mean Flows: On the Challenges of Fastforward Generative Models</a>
+              <div class="paper-summary">v-loss 重参数化 + 灵活 CFG + 高效条件化，单步 FID 从 3.43 降至 1.72</div>
+            </td>
+            <td class="paper-authors">Zhengyang Geng, Yiyang Lu, Zongze Wu, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="arcvision"
+              data-title="arc is a vision problem!"
+              data-authors="keya hu, ali cy, linlu qiu, xiaoman delores ding, runqian wang, yeyin eva zhu, jacob andreas, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像分类,transformer" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('arcvision');return false;">ARC Is a Vision Problem!</a>
+              <div class="paper-summary">将 ARC 抽象推理重定义为视觉问题，ViT + 测试时训练达 60.4%，匹配人类水平</div>
+            </td>
+            <td class="paper-authors">Keya Hu, Ali Cy, Linlu Qiu, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像分类</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
             </td>
           </tr>
 
@@ -497,6 +569,201 @@
           '<li><strong>无需教师模型</strong>：从头训练，不依赖预训练多步扩散模型</li>' +
           '<li><strong>实用价值</strong>：单步生成对实时应用（如机器人控制）极有价值</li>' +
           '<li><strong>潜在局限</strong>：训练时需维护生成样本集合并计算 drifting field，可能带来额外开销</li></ul>'
+      };
+
+    papers.pmf = {
+        title: 'One-step Latent-free Image Generation with Pixel Mean Flows',
+        authors: 'Yiyang Lu, Susie Lu, Qiao Sun, Hanhong Zhao, Zhicheng Jiang, Xianbang Wang, Tianhong Li, Zhengyang Geng, Kaiming He',
+        year: 2025, venue: 'ICML 2025', rating: 5,
+        tags: ['图像生成', 'Transformer'],
+        summary: '分离预测空间与损失空间，实现单步无潜在空间图像生成，ImageNet 256×256 FID 2.22',
+        paper_url: 'https://arxiv.org/abs/2601.22158',
+        code_url: '',
+        content: '<h2>核心思想</h2>' +
+          '<p>同时去掉多步采样和潜在空间，提出 <strong>pixel MeanFlow (pMF)</strong>：单步 (1-NFE) + 像素空间直接生成。核心原则：<strong>将网络输出空间与损失空间分离</strong>——网络预测去噪图像 (x-prediction)，损失在速度空间 (v-loss) 中定义。</p>' +
+          '<img src="https://arxiv.org/html/2601.22158v2/extracted_media/x1.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>方法详解</h2>' +
+          '<h3>1. 流匹配基础</h3>' +
+          '<blockquote><strong>公式 (1)：</strong>z<sub>t</sub> = (1−t)x + tε，条件速度 v = ε − x</blockquote>' +
+          '<blockquote><strong>公式 (3)：</strong>ℒ<sub>FM</sub> = 𝔼<sub>t,x,ε</sub> ‖v<sub>θ</sub>(z<sub>t</sub>,t) − v‖²</blockquote>' +
+          '<h3>2. x-prediction 参数化 (JiT)</h3>' +
+          '<blockquote><strong>公式 (4)：</strong>v<sub>θ</sub>(z<sub>t</sub>,t) := (1/t)(z<sub>t</sub> − x<sub>θ</sub>(z<sub>t</sub>,t))</blockquote>' +
+          '<p>网络不预测高维速度场，而是预测位于低维图像流形上的去噪图像。</p>' +
+          '<h3>3. 平均速度与 MeanFlow 恒等式</h3>' +
+          '<blockquote><strong>公式 (5)：</strong>u(z<sub>t</sub>,r,t) ≜ (1/(t−r)) ∫<sub>r</sub><sup>t</sup> v(z<sub>τ</sub>,τ) dτ</blockquote>' +
+          '<blockquote><strong>公式 (6) MeanFlow 恒等式：</strong>v(z<sub>t</sub>,t) = u(z<sub>t</sub>,r,t) + (t−r)(d/dt)u(z<sub>t</sub>,r,t)</blockquote>' +
+          '<h3>4. 广义去噪图像场（核心贡献）</h3>' +
+          '<blockquote style="background:#e8f4fd;border-left:4px solid #2563eb;padding:16px;"><strong>公式 (8)：</strong>x(z<sub>t</sub>,r,t) ≜ z<sub>t</sub> − t · u(z<sub>t</sub>,r,t)</blockquote>' +
+          '<p><strong>三个边界情况：</strong></p>' +
+          '<ul><li>r=t → x(z<sub>t</sub>,t,t) = z<sub>t</sub> − t·v(z<sub>t</sub>,t)（JiT 去噪预测）</li>' +
+          '<li>r=0 → x(z<sub>t</sub>,0,t) = z<sub>0</sub>（ODE 终点，服从数据分布）</li>' +
+          '<li>0&lt;r&lt;t → 近似干净或轻微模糊图像</li></ul>' +
+          '<h3>5. pMF 网络参数化</h3>' +
+          '<blockquote><strong>公式 (11)：</strong>u<sub>θ</sub>(z<sub>t</sub>,r,t) = (1/t)(z<sub>t</sub> − x<sub>θ</sub>(z<sub>t</sub>,r,t))</blockquote>' +
+          '<blockquote><strong>公式 (12) pMF 损失：</strong>ℒ<sub>pMF</sub> = 𝔼 ‖V<sub>θ</sub> − v‖²，其中 V<sub>θ</sub> = u<sub>θ</sub> + (t−r)·JVP<sub>sg</sub></blockquote>' +
+          '<p><strong>完整计算链：</strong>x<sub>θ</sub>(网络输出) → u<sub>θ</sub>=(z<sub>t</sub>−x<sub>θ</sub>)/t → JVP → V<sub>θ</sub>=u<sub>θ</sub>+(t−r)·sg(du/dt) → 与 v=ε−x 做 L2 损失</p>' +
+          '<h3>6. 感知损失</h3>' +
+          '<blockquote><strong>公式 (13)：</strong>ℒ = ℒ<sub>pMF</sub> + λ·ℒ<sub>perc</sub></blockquote>' +
+          '<p>x-prediction 直接输出像素图像，天然支持 LPIPS 感知损失（无需 VAE 解码）。</p>' +
+          '<h3>7. 关键消融</h3>' +
+          '<p><strong>x-prediction vs u-prediction：</strong></p>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">分辨率</th><th style="padding:6px 10px;">Patch维度</th><th style="padding:6px 10px;">x-pred FID</th><th style="padding:6px 10px;">u-pred FID</th></tr><tr><td style="padding:6px 10px;">64×64</td><td style="padding:6px 10px;">48</td><td style="padding:6px 10px;">3.80</td><td style="padding:6px 10px;">3.82</td></tr><tr><td style="padding:6px 10px;">256×256</td><td style="padding:6px 10px;">768</td><td style="padding:6px 10px;font-weight:bold;">9.56</td><td style="padding:6px 10px;color:red;">164.89</td></tr></table>' +
+          '<p>高维 u-prediction <strong>完全崩溃</strong>，验证了流形假设。</p>' +
+          '<img src="https://arxiv.org/html/2601.22158v2/extracted_media/figs/demo_final.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>实验结果</h2>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">方法</th><th style="padding:6px 10px;">NFE</th><th style="padding:6px 10px;">空间</th><th style="padding:6px 10px;">FID↓</th></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:6px 10px;">pMF-H/16</td><td style="padding:6px 10px;">1</td><td style="padding:6px 10px;">像素</td><td style="padding:6px 10px;">2.22</td></tr>' +
+          '<tr><td style="padding:6px 10px;">iMF-XL/2</td><td style="padding:6px 10px;">1</td><td style="padding:6px 10px;">潜在</td><td style="padding:6px 10px;">1.72</td></tr>' +
+          '<tr><td style="padding:6px 10px;">StyleGAN-XL</td><td style="padding:6px 10px;">1</td><td style="padding:6px 10px;">像素</td><td style="padding:6px 10px;">2.30</td></tr></table>' +
+          '<p>首个一步无潜在方法达到 FID 2.22，计算量仅为 StyleGAN-XL 的 1/6。</p>' +
+          '<h2>个人思考</h2>' +
+          '<ul><li><strong>预测空间与损失空间分离</strong>是核心 insight</li>' +
+          '<li>流形假设的实验验证非常有说服力</li>' +
+          '<li>感知损失的天然融入是像素空间方法的独有优势</li>' +
+          '<li>与 iMF 互补：iMF 在潜在空间，pMF 将其推广到像素空间</li></ul>'
+      };
+
+    papers.biflow = {
+        title: 'Bidirectional Normalizing Flow: From Data to Noise and Back',
+        authors: 'Yiyang Lu, Qiao Sun, Xianbang Wang, Zhicheng Jiang, Hanhong Zhao, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 4,
+        tags: ['图像生成', 'Transformer'],
+        summary: '用可学习反向模型替代精确解析逆，相比因果解码加速 100 倍，NF 方法 SOTA',
+        paper_url: 'https://arxiv.org/abs/2512.10953',
+        code_url: '',
+        content: '<h2>核心思想</h2>' +
+          '<p>传统归一化流要求前向和反向过程互为<strong>精确解析逆函数</strong>，限制了架构设计。BiFlow 用<strong>可学习反向模型</strong>替代，解锁双向注意力，加速 <strong>100 倍</strong>。</p>' +
+          '<img src="https://arxiv.org/html/2512.10953v1/extracted_media/x1.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>方法详解</h2>' +
+          '<h3>1. 标准 NF 的对数似然</h3>' +
+          '<blockquote><strong>公式 (1)：</strong>log p(x) = log p<sub>0</sub>(z) + Σ<sub>i</sub> log|det ∂f<sub>i</sub>/∂x<sup>i</sup>|</blockquote>' +
+          '<p>变量变换公式：先验分布项 + 雅可比行列式项。</p>' +
+          '<h3>2. 三种反向学习方法</h3>' +
+          '<img src="https://arxiv.org/html/2512.10953v1/extracted_media/x5.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<blockquote style="background:#e8f4fd;border-left:4px solid #2563eb;padding:16px;"><strong>隐对齐（最优）：</strong>ℒ<sub>align</sub>(x) = Σ<sub>i</sub> 𝒟(x<sup>i</sup>, φ<sub>i</sub>(h<sup>i</sup>))</blockquote>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">方法</th><th style="padding:6px 10px;">注意力</th><th style="padding:6px 10px;">FID↓</th></tr>' +
+          '<tr><td style="padding:6px 10px;">精确逆</td><td style="padding:6px 10px;">因果</td><td style="padding:6px 10px;">44.46</td></tr>' +
+          '<tr><td style="padding:6px 10px;">朴素蒸馏</td><td style="padding:6px 10px;">双向</td><td style="padding:6px 10px;">43.41</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:6px 10px;">隐对齐</td><td style="padding:6px 10px;">双向</td><td style="padding:6px 10px;">36.93</td></tr></table>' +
+          '<h3>3. 学习去噪</h3>' +
+          '<p>TARFlow 需额外分数去噪步（加倍推理成本）：x ← x̃ + σ²∇log p(x̃)。BiFlow 将去噪集成为反向模型的一个块，联合训练。</p>' +
+          '<h3>4. 训练时 CFG</h3>' +
+          '<blockquote><strong>公式 (4)：</strong>h<sup>i+1</sup> = (1+w<sub>i</sub>)𝒢<sub>φ</sub><sup>i</sup>(h<sup>i</sup>|c) − w<sub>i</sub>𝒢<sub>φ</sub><sup>i</sup>(h<sup>i</sup>)</blockquote>' +
+          '<blockquote><strong>公式 (5) 重参数化：</strong>训练时直接优化 CFG 版本，推理时 1-NFE</blockquote>' +
+          '<h3>5. 自适应加权损失</h3>' +
+          '<blockquote><strong>公式 (7)：</strong>𝒟<sub>p</sub> = sg(w<sub>p</sub>)·𝒟(x,y)，w<sub>p</sub> = (𝒟(x,y)+c)<sup>−p</sup></blockquote>' +
+          '<h2>实验结果</h2>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">模型</th><th style="padding:6px 10px;">FID↓</th><th style="padding:6px 10px;">速度</th></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:6px 10px;">BiFlow-B/2</td><td style="padding:6px 10px;">2.39</td><td style="padding:6px 10px;">1.6ms</td></tr>' +
+          '<tr><td style="padding:6px 10px;">iTARFlow-B/2</td><td style="padding:6px 10px;">6.83</td><td style="padding:6px 10px;">66ms (42×慢)</td></tr>' +
+          '<tr><td style="padding:6px 10px;">iTARFlow-XL/2</td><td style="padding:6px 10px;">4.54</td><td style="padding:6px 10px;">203ms (128×慢)</td></tr></table>' +
+          '<p>NF 方法 SOTA (FID 2.39)，参数仅为 STARFlow 的 1/10，速度快 400 倍。</p>' +
+          '<h2>个人思考</h2>' +
+          '<ul><li>移除精确逆约束是大胆设计，以数学优雅换取架构自由</li>' +
+          '<li>隐对齐 > 隐蒸馏：给予反向模型独立表示自由度更好</li>' +
+          '<li>训练时 CFG 将 2-NFE 变为 1-NFE，部署速度翻倍</li>' +
+          '<li>噪声空间修复是 NF 双射映射的独有优势</li></ul>'
+      };
+
+    papers.imf = {
+        title: 'Improved Mean Flows: On the Challenges of Fastforward Generative Models',
+        authors: 'Zhengyang Geng, Yiyang Lu, Zongze Wu, Eli Shechtman, J. Zico Kolter, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['图像生成', 'Transformer'],
+        summary: 'v-loss 重参数化 + 灵活 CFG + 高效条件化，单步 FID 从 3.43 降至 1.72',
+        paper_url: 'https://arxiv.org/abs/2512.02012',
+        code_url: '',
+        content: '<h2>核心思想</h2>' +
+          '<p>针对原始 MeanFlow 的三大挑战提出改进，将 FID 从 3.43 降至 <strong>1.72</strong>（相对提升 50%）。</p>' +
+          '<img src="https://arxiv.org/html/2512.02012v1/extracted_media/x1.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>方法详解</h2>' +
+          '<h3>1. MeanFlow 恒等式</h3>' +
+          '<blockquote><strong>公式 (3)：</strong>u(z<sub>t</sub>,r,t) ≜ (1/(t−r)) ∫<sub>r</sub><sup>t</sup> v(z<sub>τ</sub>) dτ</blockquote>' +
+          '<blockquote><strong>公式 (4)：</strong>u(z<sub>t</sub>) = v(z<sub>t</sub>) − (t−r)(d/dt)u(z<sub>t</sub>)</blockquote>' +
+          '<h3>2. 挑战一：网络依赖目标 → v-loss 重参数化</h3>' +
+          '<p><strong>原始 MF 问题：</strong>目标中包含 u<sub>θ</sub> 本身（通过 JVP），非标准回归。</p>' +
+          '<p>从恒等式 (4) 重新整理为：v = u + (t−r)(d/dt)u</p>' +
+          '<blockquote style="background:#e8f4fd;border-left:4px solid #2563eb;padding:16px;"><strong>公式 (12) 核心：</strong>V<sub>θ</sub>(z<sub>t</sub>) ≜ u<sub>θ</sub>(z<sub>t</sub>) + (t−r)·JVP<sub>sg</sub>(u<sub>θ</sub>; v<sub>θ</sub>)</blockquote>' +
+          '<p><strong>关键改进：</strong>JVP 输入从条件速度 (e−x) 替换为 v<sub>θ</sub>，后者仅依赖 z<sub>t</sub>。</p>' +
+          '<p><strong>v<sub>θ</sub> 实现：</strong>边界条件 v<sub>θ</sub>(z<sub>t</sub>,t) ≡ u<sub>θ</sub>(z<sub>t</sub>,t,t)，无额外参数。</p>' +
+          '<img src="https://arxiv.org/html/2512.02012v1/extracted_media/x4.png" style="max-width:100%;border-radius:8px;margin:16px 0;" alt="训练损失：原始MF不稳定，iMF单调递减">' +
+          '<h3>3. 挑战二：固定 CFG → 灵活条件化</h3>' +
+          '<blockquote><strong>公式 (15)：</strong>V<sub>θ</sub>(·|c,ω) ≜ u<sub>θ</sub>(z<sub>t</sub>|c,ω) + (t−r)·JVP<sub>sg</sub></blockquote>' +
+          '<p>将 ω 作为条件变量，训练时随机采样 ω∈[1.0,8.0]，推理时自由调整。</p>' +
+          '<blockquote><strong>完整条件集：</strong>u<sub>θ</sub> = u<sub>θ</sub>(z<sub>t</sub> | r, t, c, Ω)，Ω={ω, t<sub>min</sub>, t<sub>max</sub>}</blockquote>' +
+          '<h3>4. 挑战三：条件效率 → 上下文条件化</h3>' +
+          '<p>用多 token 上下文替代 adaLN-zero：参数从 133M 降至 <strong>89M</strong>（−33%），FID 同时改善。</p>' +
+          '<img src="https://arxiv.org/html/2512.02012v1/extracted_media/x6.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h3>5. 单步采样</h3>' +
+          '<blockquote>z<sub>0</sub> = z<sub>1</sub> − u<sub>θ</sub>(z<sub>1</sub>)，其中 (r,t)=(0,1)，z<sub>1</sub>∼p<sub>prior</sub></blockquote>' +
+          '<h2>实验结果</h2>' +
+          '<p><strong>逐步消融：</strong></p>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">改进</th><th style="padding:6px 10px;">FID↓</th></tr>' +
+          '<tr><td style="padding:6px 10px;">原始 MF</td><td style="padding:6px 10px;">6.17</td></tr>' +
+          '<tr><td style="padding:6px 10px;">+ v-loss</td><td style="padding:6px 10px;">5.68</td></tr>' +
+          '<tr><td style="padding:6px 10px;">+ Ω 条件化</td><td style="padding:6px 10px;">4.57</td></tr>' +
+          '<tr><td style="padding:6px 10px;">+ 上下文条件化</td><td style="padding:6px 10px;">4.09</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:6px 10px;">+ 高级 Transformer + 640轮</td><td style="padding:6px 10px;">3.39</td></tr></table>' +
+          '<p><strong>系统级结果：</strong></p>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">模型</th><th style="padding:6px 10px;">参数</th><th style="padding:6px 10px;">FID↓</th></tr>' +
+          '<tr><td style="padding:6px 10px;">MF-XL/2</td><td style="padding:6px 10px;">676M</td><td style="padding:6px 10px;">3.43</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:6px 10px;">iMF-XL/2</td><td style="padding:6px 10px;">610M</td><td style="padding:6px 10px;">1.72</td></tr></table>' +
+          '<p>首个从头训练的单步方法突破 FID 2.0。</p>' +
+          '<img src="https://arxiv.org/html/2512.02012v1/extracted_media/x7.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>个人思考</h2>' +
+          '<ul><li>v-loss 重参数化消除了目标对网络的依赖，训练稳定性大幅提升</li>' +
+          '<li>灵活 CFG 非常实用：单模型支持推理时调整引导强度</li>' +
+          '<li>上下文条件化「参数更少效果更好」，adaLN-zero 可能过度参数化</li>' +
+          '<li>与 pMF 互补：iMF 在潜在空间，pMF 扩展到像素空间</li></ul>'
+      };
+
+    papers.arcvision = {
+        title: 'ARC Is a Vision Problem!',
+        authors: 'Keya Hu, Ali Cy, Linlu Qiu, Xiaoman Delores Ding, Runqian Wang, Yeyin Eva Zhu, Jacob Andreas, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 4,
+        tags: ['图像分类', 'Transformer'],
+        summary: '将 ARC 抽象推理重定义为视觉问题，ViT + 测试时训练达 60.4%，匹配人类水平',
+        paper_url: 'https://arxiv.org/abs/2511.14761',
+        code_url: '',
+        content: '<h2>核心思想</h2>' +
+          '<p>ARC（抽象推理语料库）传统上被视为语言/符号推理问题。本文提出：<strong>ARC 本质上是视觉问题</strong>——涉及反射、对称、重力等视觉概念。用 ViT 做图像到图像映射 + 测试时训练，达到 <strong>60.4%</strong>（匹配人类 60.2%）。</p>' +
+          '<img src="https://arxiv.org/html/2511.14761v1/extracted_media/x1.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>方法详解</h2>' +
+          '<h3>1. 目标函数</h3>' +
+          '<blockquote><strong>公式 (1)：</strong>ℒ(θ) = 𝔼<sub>T,i</sub> [𝒟(y<sub>i</sub>, f<sub>θ</sub>(x<sub>i</sub>|T))]</blockquote>' +
+          '<p>𝒟 为逐像素交叉熵损失，T 为任务（包含 2-4 个演示对）。</p>' +
+          '<h3>2. 画布表示</h3>' +
+          '<p>ARC 网格最大 30×30、10 种颜色，放置在固定 <strong>64×64 画布</strong>上。</p>' +
+          '<ul><li><strong>平移增强</strong>：随机放置位置（+2.9%）</li>' +
+          '<li><strong>缩放增强</strong>：随机整数缩放，每像素复制为 s×s（<strong>+6.2%</strong>，贡献最大）</li></ul>' +
+          '<img src="https://arxiv.org/html/2511.14761v1/extracted_media/x4.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h3>3. 视觉架构</h3>' +
+          '<ul><li><strong>2×2 Patch</strong>：扩展 token 空间从 10 种到 10⁴=10000 种组合</li>' +
+          '<li><strong>2D 位置嵌入</strong>：保留空间结构</li>' +
+          '<li>演示对所有 token 拼接为上下文，与测试输入一起送入 ViT</li></ul>' +
+          '<img src="https://arxiv.org/html/2511.14761v1/extracted_media/x5.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h3>4. 两阶段训练</h3>' +
+          '<p><strong>离线训练：</strong>400 个训练任务上学习通用视觉推理</p>' +
+          '<p><strong>测试时训练 (TTT)：</strong>每个新任务 100 轮微调</p>' +
+          '<ol><li>从演示对通过旋转/翻转/颜色置换生成 50 个辅助样本</li>' +
+          '<li>在辅助样本上微调 100 轮</li>' +
+          '<li>微调后模型进行推断</li></ol>' +
+          '<img src="https://arxiv.org/html/2511.14761v1/extracted_media/x6.png" style="max-width:100%;border-radius:8px;margin:16px 0;" alt="TTT 预测逐步精化">' +
+          '<h3>5. 多视图推理</h3>' +
+          '<p>510 个增强视图 + 多数投票，单视图 35.9% → 多视图 <strong>54.5%</strong>（+18.6%）。</p>' +
+          '<h2>实验结果</h2>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;text-align:left;">方法</th><th style="padding:6px 10px;">ARC-1</th><th style="padding:6px 10px;">ARC-2</th></tr>' +
+          '<tr style="background:#eff6ff;font-weight:600;"><td style="padding:6px 10px;">VARC 集成</td><td style="padding:6px 10px;">60.4%</td><td style="padding:6px 10px;">11.1%</td></tr>' +
+          '<tr><td style="padding:6px 10px;">VARC 单模型 (ViT-18M)</td><td style="padding:6px 10px;">54.5%</td><td style="padding:6px 10px;">8.3%</td></tr>' +
+          '<tr><td style="padding:6px 10px;">人类平均</td><td style="padding:6px 10px;">60.2%</td><td style="padding:6px 10px;">—</td></tr></table>' +
+          '<p><strong>视觉先验消融（累积 +27.7%）：</strong></p>' +
+          '<img src="https://arxiv.org/html/2511.14761v1/extracted_media/x7.png" style="max-width:100%;border-radius:8px;margin:16px 0;">' +
+          '<h2>个人思考</h2>' +
+          '<ul><li>「ARC 是视觉问题」的 reframing 非常有力</li>' +
+          '<li>缩放增强 +6.2% 说明规则具有尺度不变性</li>' +
+          '<li>18M 参数匹配人类，体现正确归纳偏置的价值</li>' +
+          '<li>TTT 是核心：离线训练学通用特征，TTT 适配新规则</li>' +
+          '<li>ARC-2 的 11.1% 暴露局限，可能需要视觉+符号混合方法</li></ul>'
       };
 
     // Show detail
