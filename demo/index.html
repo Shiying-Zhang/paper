@@ -138,7 +138,7 @@
       <h1>Paper Reading Notes</h1>
       <p>个人论文阅读笔记归档</p>
       <div class="stats">
-        <span class="stat-item">共 <strong>20</strong> 篇论文</span>
+        <span class="stat-item">共 <strong>22</strong> 篇论文</span>
       </div>
     </section>
 
@@ -163,6 +163,7 @@
           <button class="tag-btn" data-tag="cuda优化">CUDA优化</button>
           <button class="tag-btn" data-tag="上下文工程">上下文工程</button>
           <button class="tag-btn" data-tag="模仿学习">模仿学习</button>
+          <button class="tag-btn" data-tag="视频生成">视频生成</button>
         </div>
       </div>
       <div class="sort-group">
@@ -546,6 +547,42 @@
             <td class="paper-tags"><span class="tag">LLM Agent</span><span class="tag">上下文工程</span></td>
             <td class="paper-rating">
               <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="dcvideogen"
+              data-title="dc-videogen: efficient video generation with deep compression video autoencoder"
+              data-authors="junyu chen, wenkun he, yuchao gu, yuyang zhao, et al."
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="视频生成,transformer" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('dcvideogen');return false;">DC-VideoGen: Efficient Video Generation with Deep Compression Video Autoencoder</a>
+              <div class="paper-summary">384× 压缩率 VAE + 轻量适配，单卡 H100 生成 720p 视频加速 7.7×</div>
+            </td>
+            <td class="paper-authors">Junyu Chen, Wenkun He, Yuchao Gu, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">视频生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="sanavideo"
+              data-title="sana-video: efficient video generation with block linear diffusion transformer"
+              data-authors="junsong chen, yuyang zhao, jincheng yu, ruihang chu, et al."
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="视频生成,transformer" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('sanavideo');return false;">SANA-Video: Efficient Video Generation with Block Linear Diffusion Transformer</a>
+              <div class="paper-summary">O(N) 线性注意力 + O(D²) 常量内存 KV Cache，2B 参数 720p 比 Wan-14B 快 53×</div>
+            </td>
+            <td class="paper-authors">Junsong Chen, Yuyang Zhao, Jincheng Yu, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">视频生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
             </td>
           </tr>
 
@@ -950,6 +987,203 @@
           '<li>18M 参数匹配人类，体现正确归纳偏置的价值</li>' +
           '<li>TTT 是核心：离线训练学通用特征，TTT 适配新规则</li>' +
           '<li>ARC-2 的 11.1% 暴露局限，可能需要视觉+符号混合方法</li></ul>'
+      };
+
+    papers.jit = {
+        title: 'Back to Basics: Let Denoising Generative Models Denoise',
+        authors: 'Tianhong Li, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['图像生成', 'Transformer'],
+        summary: '基于流形假设提出 JiT：ViT 直接在像素空间做 x-prediction，无需 tokenizer/预训练/辅助损失，FID 1.82',
+        paper_url: 'https://arxiv.org/abs/2511.13720', code_url: '',
+        content: '<h2>核心思想</h2><p>基于<strong>流形假设</strong>论证：自然图像位于高维空间中的低维流形上，x 是 on-manifold（低维），而 ε 和 v 是 off-manifold（高维）。对有限容量网络，预测低维目标更容易。提出 <strong>JiT</strong>：标准 ViT 直接在像素上做 x-prediction。</p>' +
+          '<h2>方法详解</h2>' +
+          '<h3>1. x-prediction + v-loss</h3>' +
+          '<blockquote><strong>公式 (6)：</strong>ℒ = 𝔼 ‖(net<sub>θ</sub>(z<sub>t</sub>,t) − z<sub>t</sub>)/(1−t) − v‖²</blockquote>' +
+          '<p>等价于加权 x-loss：ℒ = 𝔼[1/(1−t)² · ‖x<sub>θ</sub> − x‖²]。v-loss 在接近数据端（t→1）给更大权重。</p>' +
+          '<h3>2. 流形假设验证</h3>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;">维度 D</th><th style="padding:6px 10px;">x-pred</th><th style="padding:6px 10px;">ε-pred</th><th style="padding:6px 10px;">v-pred</th></tr>' +
+          '<tr><td style="padding:6px 10px;">2</td><td style="padding:6px 10px;">✓</td><td style="padding:6px 10px;">✓</td><td style="padding:6px 10px;">✓</td></tr>' +
+          '<tr><td style="padding:6px 10px;">512</td><td style="padding:6px 10px;font-weight:bold;">✓</td><td style="padding:6px 10px;color:red;">崩溃</td><td style="padding:6px 10px;color:red;">崩溃</td></tr></table>' +
+          '<h3>3. 瓶颈嵌入</h3><p>128 维瓶颈 FID 7.48 优于 768 维无瓶颈 8.62，<strong>验证流形假设</strong>。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>JiT-G：256×256 FID <strong>1.82</strong>，512×512 FID <strong>1.78</strong>，无需 tokenizer。</p>' +
+          '<h2>个人思考</h2><ul><li>流形假设的力量：一个简单观察产生巨大实际影响</li><li>极致简洁的设计哲学</li></ul>'
+      };
+
+    papers.dispersive = {
+        title: 'Diffuse and Disperse: Image Generation with Representation Regularization',
+        authors: 'Runqian Wang, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 4,
+        tags: ['图像生成', '自监督学习'],
+        summary: '提出 Dispersive Loss——无正样本对的对比学习正则化，零成本一致提升扩散模型质量',
+        paper_url: 'https://arxiv.org/abs/2506.09027', code_url: '',
+        content: '<h2>核心思想</h2><p>对比学习 = 正样本对齐 + 负样本排斥。扩散损失已提供对齐，只需保留<strong>负样本排斥</strong>项。</p>' +
+          '<h2>方法详解</h2>' +
+          '<blockquote><strong>Dispersive Loss (公式 6)：</strong>ℒ<sub>Disp</sub> = log 𝔼<sub>i,j</sub>[exp(−𝒟(z<sub>i</sub>, z<sub>j</sub>)/τ)]</blockquote>' +
+          '<p>InfoNCE 去掉正样本对齐项，只保留负样本排斥。应用于所有 Transformer blocks 效果最好。</p>' +
+          '<h2>实验结果</h2><p>MeanFlow-XL/2 FID 从 3.43 降至 <strong>3.21</strong>（−6.4%）。零额外参数、零外部数据。</p>'
+      };
+
+    papers.meanflow = {
+        title: 'Mean Flows for One-step Generative Modeling',
+        authors: 'Zhengyang Geng, Mingyang Deng, Xingjian Bai, J. Zico Kolter, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['图像生成', 'Transformer'],
+        summary: '引入平均速度替代瞬时速度，单步生成 FID 3.43，无需预训练/蒸馏',
+        paper_url: 'https://arxiv.org/abs/2505.13447', code_url: '',
+        content: '<h2>核心思想</h2><p>用<strong>平均速度</strong> u 替代瞬时速度 v：知道了起点到终点的平均速度，一步就能到达。</p>' +
+          '<h2>方法详解</h2>' +
+          '<blockquote><strong>公式 (3)：</strong>u(z<sub>t</sub>,r,t) ≜ (1/(t−r)) ∫<sub>r</sub><sup>t</sup> v(z<sub>τ</sub>,τ) dτ</blockquote>' +
+          '<blockquote style="background:#e8f4fd;border-left:4px solid #2563eb;padding:16px;"><strong>MeanFlow 恒等式 (6)：</strong>u = v − (t−r)(d/dt)u</blockquote>' +
+          '<p>通过 JVP 计算时间导数，训练目标：ℒ = 𝔼[‖u<sub>θ</sub> − sg(u<sub>tgt</sub>)‖²]</p>' +
+          '<h2>实验结果</h2><p>MeanFlow-XL/2 单步 FID <strong>3.43</strong>，2-NFE FID <strong>2.20</strong>（接近 250 步 DiT 的 2.27）。</p>'
+      };
+
+    papers.noisecond = {
+        title: 'Is Noise Conditioning Necessary for Denoising Generative Models?',
+        authors: 'Qiao Sun, Zhicheng Jiang, Hanhong Zhao, Kaiming He',
+        year: 2025, venue: 'arXiv 2025', rating: 4,
+        tags: ['图像生成', 'CNN'],
+        summary: '挑战噪声条件化的必要性：大多数扩散模型去掉噪声级别输入后仍能工作甚至更好',
+        paper_url: 'https://arxiv.org/abs/2502.13129', code_url: '',
+        content: '<h2>核心思想</h2><p>扩散模型<strong>是否真的需要知道噪声级别 t？</strong>后验集中性理论表明高维数据中，网络可从 z 本身推断出近似噪声级别。</p>' +
+          '<h2>方法详解</h2>' +
+          '<blockquote><strong>后验方差 (9)：</strong>Var[t|z] ≈ t*²/(2d)</blockquote>' +
+          '<p>维度 d 越高后验越集中。对 CIFAR-10 (d=3072)，方差 ≈ t*²/6144。</p>' +
+          '<h2>实验结果</h2>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;">模型</th><th style="padding:6px 10px;">有 t</th><th style="padding:6px 10px;">无 t</th><th style="padding:6px 10px;">变化</th></tr>' +
+          '<tr><td style="padding:6px 10px;">DDIM ODE</td><td style="padding:6px 10px;">3.99</td><td style="padding:6px 10px;">40.90</td><td style="padding:6px 10px;color:red;">崩溃</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:bold;"><td style="padding:6px 10px;">FM Euler</td><td style="padding:6px 10px;">3.01</td><td style="padding:6px 10px;">2.61</td><td style="padding:6px 10px;color:green;">改善!</td></tr></table>'
+      };
+
+    papers.godelAgent = {
+        title: 'Gödel Agent: A Self-Referential Agent Framework for Recursive Self-Improvement',
+        authors: 'Xunjian Yin, Xinyi Wang, Liangming Pan, Li Lin, Xiaojun Wan, William Yang Wang',
+        year: 2024, venue: 'arXiv 2024', rating: 4,
+        tags: ['LLM Agent', '自我改进'],
+        summary: 'LLM Agent 通过 monkey patching 在运行时修改自身代码，同时改进策略 π 和学习算法 I',
+        paper_url: 'https://arxiv.org/abs/2410.04444', code_url: 'https://github.com/Arvid-pku/Godel_Agent',
+        content: '<h2>核心思想</h2><p>Gödel Agent 能<strong>自引用地修改自身代码</strong>，包括策略 π <strong>和</strong>学习算法 I：π<sub>t+1</sub>, I<sub>t+1</sub> = I<sub>t</sub>(π<sub>t</sub>, I<sub>t</sub>, r<sub>t</sub>, g)</p>' +
+          '<h2>方法详解</h2>' +
+          '<p>四个核心动作：self_inspect（内省）、interact（评估）、self_update（monkey patching）、continue_improve（递归调用）。递归设计允许主循环本身被修改。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>MGSM +10.8% over Meta Agent Search。Game of 24 中自主从 LLM prompting 切换到搜索算法达到 100%。</p>'
+      };
+
+    papers.dgm = {
+        title: 'Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents',
+        authors: 'Jenny Zhang, Shengran Hu, Cong Lu, Robert Lange, Jeff Clune',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['LLM Agent', '自我改进'],
+        summary: '维护 Agent 群体档案，通过开放式演化实现编码 Agent 自改进，SWE-bench 20%→50%',
+        paper_url: 'https://arxiv.org/abs/2505.22954', code_url: 'https://github.com/jennyzzt/dgm',
+        content: '<h2>核心思想</h2><p>用<strong>经验验证</strong>替代形式化证明，维护 <strong>Agent 档案</strong>实现开放式探索。核心洞察：创新之路可能经过低性能节点。</p>' +
+          '<h2>方法详解</h2>' +
+          '<p>自修改循环：选中 Agent 生成修改版 → 基准测试评估 → 保留有代码编辑功能的进入档案。分级评估：10→50→200 任务。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>SWE-bench 20%→<strong>50%</strong>，Polyglot 14%→<strong>38%</strong>。跨模型迁移：Claude 3.7 Sonnet 上达 59.5%。</p>'
+      };
+
+    papers.hgm = {
+        title: 'Huxley-Gödel Machine: Human-Level Coding Agent Development',
+        authors: 'Wenyi Wang, Piotr Piękos, Li Nanbo, Firas Laakom, et al.',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['LLM Agent', '自我改进'],
+        summary: '发现元生产力-性能不匹配问题，用 CMP 指标指导 Agent 树搜索演化，SWE-bench 达 61.4%',
+        paper_url: 'https://arxiv.org/abs/2510.21614', code_url: 'https://github.com/metauto-ai/HGM',
+        content: '<h2>核心思想</h2><p><strong>MPM 发现</strong>：即时性能不能预测自改进潜力。<strong>CMP</strong>：评估 Agent 看其整个后代谱系表现。</p>' +
+          '<h2>方法详解</h2>' +
+          '<blockquote>CMP(a) = 𝔼[max<sub>a\'∈C(a)</sub> U(a\')]</blockquote>' +
+          '<p>三策略解耦：选择策略（何时扩展 vs 评估）、扩展策略（CMP + Thompson Sampling）、评估策略（个体表现）。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>SWE-bench <strong>61.4%</strong>（Top-10），比 DGM 快 <strong>2.38×</strong>。CMP 与真实元生产力相关性 0.778（SICA 仅 0.444）。</p>'
+      };
+
+    papers.dexflywheel = {
+        title: 'DexFlyWheel: Scalable Self-improving Data Generation for Dexterous Manipulation',
+        authors: 'Kefei Zhu, Fengshuo Bai, YuanHao Xiang, et al.',
+        year: 2024, venue: 'arXiv 2024', rating: 4,
+        tags: ['机器人操控', '模仿学习'],
+        summary: '从单个人类示范出发，通过 IL+残差 RL+数据增强飞轮循环生成 2000+ 灵巧操控轨迹',
+        paper_url: 'https://arxiv.org/abs/2509.23829', code_url: '',
+        content: '<h2>核心思想</h2><p>自我改进飞轮：更好的数据 → 更好的策略 → 更好的 rollout → 更好的数据。</p>' +
+          '<h2>方法详解</h2>' +
+          '<p>每次迭代：(1) 扩散策略模仿学习 (2) SAC 残差 RL（α=0.1 微调）(3) 冻结策略 rollout (4) 多维数据增强。残差范数比 ~15% 证明是微调而非重规划。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>T_OEP 成功率 16.5%→<strong>81.9%</strong>，比 DexMimicGen +36.7pp。真实世界举升 78.3%、交接 63.3%。</p>'
+      };
+
+    papers.cudaforge = {
+        title: 'CudaForge: Agent Framework with Hardware Feedback for CUDA Kernel Optimization',
+        authors: 'Zijian Zhang, Rong Wang, Shiyang Li, Yuebo Luo, Mingyi Hong, Caiwen Ding',
+        year: 2025, venue: 'arXiv 2025', rating: 4,
+        tags: ['LLM Agent', 'CUDA优化'],
+        summary: '双 Agent + NCU 硬件反馈，免训练 CUDA kernel 平均 1.77× 加速，$0.30/kernel',
+        paper_url: 'https://arxiv.org/abs/2511.01884', code_url: '',
+        content: '<h2>核心思想</h2><p>模拟人类专家工作流：<strong>Coder</strong> 写 kernel，<strong>Judge</strong> 用 Nsight Compute 分析硬件瓶颈。</p>' +
+          '<h2>方法详解</h2>' +
+          '<p>N=10 轮迭代：Coder 生成 → 正确性测试 → Judge NCU 分析 → 针对性反馈。24 个精选 NCU 指标优于全量指标。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>97.6% 正确率，<strong>1.677× 平均加速</strong>。$0.30 + 26.5 min/kernel（基线 $5.0 + 60 min）。跨 GPU 泛化 100% 正确率。</p>'
+      };
+
+    papers.ace = {
+        title: 'Agentic Context Engineering: Evolving Contexts for Self-Improving LMs',
+        authors: 'Qizheng Zhang, Changran Hu, et al.',
+        year: 2025, venue: 'ICLR 2026', rating: 4,
+        tags: ['LLM Agent', '上下文工程'],
+        summary: '解决上下文优化的简洁偏差和坍缩问题，Generator-Reflector-Curator 三组件架构',
+        paper_url: 'https://arxiv.org/abs/2510.04618', code_url: 'https://github.com/ace-agent/ace',
+        content: '<h2>核心思想</h2><p>上下文 = <strong>演化的策略手册</strong>，不是压缩而是积累。解决简洁偏差（短提示丢失信息）和上下文坍缩（LLM 重写退化）。</p>' +
+          '<h2>方法详解</h2>' +
+          '<p>Generator 生成推理轨迹 → Reflector 提取教训 → Curator <strong>确定性合并</strong>为 delta 条目。结构化条目带有用/有害计数器。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>AppWorld TGC +12.5%，延迟减少 82%，Token 成本减少 84%。匹配 IBM CUGA 使用开源模型。</p>'
+      };
+
+    papers.dcvideogen = {
+        title: 'DC-VideoGen: Efficient Video Generation with Deep Compression Video Autoencoder',
+        authors: 'Junyu Chen, Wenkun He, Yuchao Gu, Yuyang Zhao, et al.',
+        year: 2025, venue: 'arXiv 2025', rating: 4,
+        tags: ['视频生成', 'Transformer'],
+        summary: '384× 压缩率 VAE + 轻量适配，单卡 H100 生成 720p 视频加速 7.7×',
+        paper_url: 'https://arxiv.org/abs/2509.25182', code_url: '',
+        content: '<h2>核心思想</h2><p>后训练加速：用更高压缩率的 <strong>DC-AE-V</strong>（384×）替换原始 VAE，通过 <strong>AE-Adapt-V</strong> 两阶段适配策略迁移预训练 DiT。</p>' +
+          '<h2>方法详解</h2>' +
+          '<blockquote><strong>压缩率公式：</strong>Ratio = 3·f²·t / c</blockquote>' +
+          '<h3>1. Chunk-Causal 时序设计</h3><p>块内双向注意力 + 块间因果注意力，兼顾重建质量和泛化性。</p>' +
+          '<h3>2. AE-Adapt-V</h3>' +
+          '<blockquote><strong>Stage 1 对齐：</strong>ℒ = MSE(e<sub>n</sub>, AvgPool(e<sub>b</sub>))</blockquote>' +
+          '<p>Stage 2：LoRA 微调（rank=256），<strong>优于全微调</strong>（VBench 84.48 vs 79.81）——更好地保留预训练知识。</p>' +
+          '<h2>实验结果</h2>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;">模型</th><th style="padding:6px 10px;">VBench↑</th><th style="padding:6px 10px;">延迟</th><th style="padding:6px 10px;">加速</th></tr>' +
+          '<tr><td style="padding:6px 10px;">Wan-2.1-14B</td><td style="padding:6px 10px;">83.73</td><td style="padding:6px 10px;">27.52 min</td><td style="padding:6px 10px;">1×</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:bold;"><td style="padding:6px 10px;">DC-VideoGen-14B</td><td style="padding:6px 10px;">84.83</td><td style="padding:6px 10px;">3.58 min</td><td style="padding:6px 10px;">7.7×</td></tr></table>' +
+          '<p>适配成本仅为从头训练的 <strong>1/230</strong>。4K 分辨率加速比达 <strong>14.8×</strong>。</p>'
+      };
+
+    papers.sanavideo = {
+        title: 'SANA-Video: Efficient Video Generation with Block Linear Diffusion Transformer',
+        authors: 'Junsong Chen, Yuyang Zhao, Jincheng Yu, Ruihang Chu, et al.',
+        year: 2025, venue: 'arXiv 2025', rating: 5,
+        tags: ['视频生成', 'Transformer'],
+        summary: 'O(N) 线性注意力 + O(D²) 常量内存 KV Cache，2B 参数 720p 比 Wan-14B 快 53×',
+        paper_url: 'https://arxiv.org/abs/2509.24695', code_url: '',
+        content: '<h2>核心思想</h2><p>用 <strong>Block Linear Attention</strong> 替代标准注意力：O(N) 计算 + <strong>O(D²) 常量内存</strong> KV Cache → 支持分钟级长视频。</p>' +
+          '<h2>方法详解</h2>' +
+          '<h3>1. 线性注意力 + RoPE</h3>' +
+          '<blockquote><strong>关键设计：</strong>RoPE 在 ReLU 之后应用（防止位置信息被过滤），分母去掉 RoPE（数值稳定性）</blockquote>' +
+          '<h3>2. 因果线性注意力</h3>' +
+          '<blockquote><strong>公式 (3)：</strong>O<sub>i</sub> = φ(Q<sub>i</sub>)(Σ<sub>j&lt;i</sub> S<sub>j</sub> + S<sub>i</sub>) / φ(Q<sub>i</sub>)(Σ<sub>j&lt;i</sub> φ(K<sub>j</sub>)<sup>T</sup> + φ(K<sub>i</sub>)<sup>T</sup>)</blockquote>' +
+          '<p>累积状态 Σ S<sub>j</sub> ∈ ℝ<sup>D×D</sup>：内存 <strong>O(D²)</strong>，与 token 数无关。</p>' +
+          '<table style="width:100%;border-collapse:collapse;font-size:14px;margin:8px 0;"><tr style="background:#f1f5f9;"><th style="padding:6px 10px;">注意力</th><th style="padding:6px 10px;">内存</th><th style="padding:6px 10px;">计算</th></tr>' +
+          '<tr><td style="padding:6px 10px;">因果全注意力</td><td style="padding:6px 10px;">O(ND)</td><td style="padding:6px 10px;">O(N²D)</td></tr>' +
+          '<tr style="background:#eff6ff;font-weight:bold;"><td style="padding:6px 10px;">因果线性注意力</td><td style="padding:6px 10px;">O(D²)</td><td style="padding:6px 10px;">O(ND²)</td></tr></table>' +
+          '<h3>3. 三阶段训练</h3><p>VAE 适配 → 从 T2I 继续预训练 → 自回归块训练（单调 SNR 采样 + Self-Forcing）。</p>' +
+          '<h2>实验结果</h2>' +
+          '<p>480P: <strong>8× 加速</strong>（60s vs 484s）。720P: <strong>53× 加速</strong>（36s vs 1897s）。训练成本仅 MovieGen 的 <strong>1%</strong>。I2V VBench <strong>88.02</strong>（SOTA）。</p>' +
+          '<p>1 分钟 480P@16FPS 在 <strong>35 秒</strong>内生成。NVFP4 量化 RTX 5090: 720p 仅 29 秒（2.4× 额外加速）。</p>'
       };
 
     // Show detail
