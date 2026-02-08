@@ -138,7 +138,7 @@
       <h1>Paper Reading Notes</h1>
       <p>个人论文阅读笔记归档</p>
       <div class="stats">
-        <span class="stat-item">共 <strong>10</strong> 篇论文</span>
+        <span class="stat-item">共 <strong>20</strong> 篇论文</span>
       </div>
     </section>
 
@@ -157,6 +157,12 @@
           <button class="tag-btn" data-tag="自监督学习">自监督学习</button>
           <button class="tag-btn" data-tag="多模态">多模态</button>
           <button class="tag-btn" data-tag="cnn">CNN</button>
+          <button class="tag-btn" data-tag="llm agent">LLM Agent</button>
+          <button class="tag-btn" data-tag="自我改进">自我改进</button>
+          <button class="tag-btn" data-tag="机器人操控">机器人操控</button>
+          <button class="tag-btn" data-tag="cuda优化">CUDA优化</button>
+          <button class="tag-btn" data-tag="上下文工程">上下文工程</button>
+          <button class="tag-btn" data-tag="模仿学习">模仿学习</button>
         </div>
       </div>
       <div class="sort-group">
@@ -358,6 +364,186 @@
             <td class="paper-year">2025</td>
             <td class="paper-venue">arXiv 2025</td>
             <td class="paper-tags"><span class="tag">图像分类</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="jit"
+              data-title="back to basics: let denoising generative models denoise"
+              data-authors="tianhong li, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,transformer" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('jit');return false;">Back to Basics: Let Denoising Generative Models Denoise</a>
+              <div class="paper-summary">基于流形假设提出 JiT：ViT 直接在像素空间做 x-prediction，无需 tokenizer，FID 1.82</div>
+            </td>
+            <td class="paper-authors">Tianhong Li, Kaiming He</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="dispersive"
+              data-title="diffuse and disperse: image generation with representation regularization"
+              data-authors="runqian wang, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,自监督学习" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('dispersive');return false;">Diffuse and Disperse: Image Generation with Representation Regularization</a>
+              <div class="paper-summary">提出 Dispersive Loss——无正样本对的对比学习正则化，零成本一致提升扩散模型质量</div>
+            </td>
+            <td class="paper-authors">Runqian Wang, Kaiming He</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">自监督学习</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="meanflow"
+              data-title="mean flows for one-step generative modeling"
+              data-authors="zhengyang geng, mingyang deng, xingjian bai, j. zico kolter, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,transformer" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('meanflow');return false;">Mean Flows for One-step Generative Modeling</a>
+              <div class="paper-summary">引入平均速度替代瞬时速度，单步生成 FID 3.43，无需预训练/蒸馏</div>
+            </td>
+            <td class="paper-authors">Zhengyang Geng, Mingyang Deng, Xingjian Bai, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">Transformer</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="noisecond"
+              data-title="is noise conditioning necessary for denoising generative models?"
+              data-authors="qiao sun, zhicheng jiang, hanhong zhao, kaiming he"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="图像生成,cnn" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('noisecond');return false;">Is Noise Conditioning Necessary for Denoising Generative Models?</a>
+              <div class="paper-summary">挑战噪声条件化的必要性：大多数扩散模型去掉噪声级别输入后仍能工作甚至更好</div>
+            </td>
+            <td class="paper-authors">Qiao Sun, Zhicheng Jiang, Hanhong Zhao, Kaiming He</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">图像生成</span><span class="tag">CNN</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="godelAgent"
+              data-title="gödel agent: a self-referential agent framework for recursive self-improvement"
+              data-authors="xunjian yin, xinyi wang, liangming pan, li lin, xiaojun wan, william yang wang"
+              data-year="2024" data-venue="arXiv 2024"
+              data-tags="llm agent,自我改进" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('godelAgent');return false;">Gödel Agent: A Self-Referential Agent Framework for Recursive Self-Improvement</a>
+              <div class="paper-summary">LLM Agent 通过 monkey patching 运行时修改自身代码，同时改进策略和学习算法</div>
+            </td>
+            <td class="paper-authors">Xunjian Yin, Xinyi Wang, Liangming Pan, et al.</td>
+            <td class="paper-year">2024</td>
+            <td class="paper-venue">arXiv 2024</td>
+            <td class="paper-tags"><span class="tag">LLM Agent</span><span class="tag">自我改进</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="dgm"
+              data-title="darwin gödel machine: open-ended evolution of self-improving agents"
+              data-authors="jenny zhang, shengran hu, cong lu, robert lange, jeff clune"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="llm agent,自我改进" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('dgm');return false;">Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</a>
+              <div class="paper-summary">维护 Agent 群体档案，通过开放式演化实现编码 Agent 自改进，SWE-bench 20%→50%</div>
+            </td>
+            <td class="paper-authors">Jenny Zhang, Shengran Hu, Cong Lu, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">LLM Agent</span><span class="tag">自我改进</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="hgm"
+              data-title="huxley-gödel machine: human-level coding agent development"
+              data-authors="wenyi wang, piotr piękos, li nanbo, firas laakom, et al."
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="llm agent,自我改进" data-rating="5">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('hgm');return false;">Huxley-Gödel Machine: Human-Level Coding Agent Development</a>
+              <div class="paper-summary">发现元生产力-性能不匹配问题，用 CMP 指标指导 Agent 树搜索演化，SWE-bench 达 61.4%</div>
+            </td>
+            <td class="paper-authors">Wenyi Wang, Piotr Piękos, Li Nanbo, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">LLM Agent</span><span class="tag">自我改进</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="dexflywheel"
+              data-title="dexflywheel: a scalable and self-improving data generation framework for dexterous manipulation"
+              data-authors="kefei zhu, fengshuo bai, yuanhao xiang, et al."
+              data-year="2024" data-venue="arXiv 2024"
+              data-tags="机器人操控,模仿学习" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('dexflywheel');return false;">DexFlyWheel: Scalable Self-improving Data Generation for Dexterous Manipulation</a>
+              <div class="paper-summary">从单个人类示范出发，通过 IL+残差 RL+数据增强飞轮循环生成 2000+ 灵巧操控轨迹</div>
+            </td>
+            <td class="paper-authors">Kefei Zhu, Fengshuo Bai, YuanHao Xiang, et al.</td>
+            <td class="paper-year">2024</td>
+            <td class="paper-venue">arXiv 2024</td>
+            <td class="paper-tags"><span class="tag">机器人操控</span><span class="tag">模仿学习</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="cudaforge"
+              data-title="cudaforge: an agent framework with hardware feedback for cuda kernel optimization"
+              data-authors="zijian zhang, rong wang, shiyang li, yuebo luo, mingyi hong, caiwen ding"
+              data-year="2025" data-venue="arXiv 2025"
+              data-tags="llm agent,cuda优化" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('cudaforge');return false;">CudaForge: Agent Framework with Hardware Feedback for CUDA Kernel Optimization</a>
+              <div class="paper-summary">双 Agent + NCU 硬件反馈，免训练 CUDA kernel 平均 1.77× 加速，$0.30/kernel</div>
+            </td>
+            <td class="paper-authors">Zijian Zhang, Rong Wang, Shiyang Li, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">arXiv 2025</td>
+            <td class="paper-tags"><span class="tag">LLM Agent</span><span class="tag">CUDA优化</span></td>
+            <td class="paper-rating">
+              <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
+            </td>
+          </tr>
+
+          <tr class="paper-row" data-id="ace"
+              data-title="agentic context engineering: evolving contexts for self-improving language models"
+              data-authors="qizheng zhang, changran hu, shubhangi upasani, et al."
+              data-year="2025" data-venue="ICLR 2026"
+              data-tags="llm agent,上下文工程" data-rating="4">
+            <td class="paper-title-cell">
+              <a href="#" onclick="showDetail('ace');return false;">Agentic Context Engineering: Evolving Contexts for Self-Improving LMs</a>
+              <div class="paper-summary">解决上下文优化的简洁偏差和坍缩问题，Generator-Reflector-Curator 三组件架构</div>
+            </td>
+            <td class="paper-authors">Qizheng Zhang, Changran Hu, et al.</td>
+            <td class="paper-year">2025</td>
+            <td class="paper-venue">ICLR 2026</td>
+            <td class="paper-tags"><span class="tag">LLM Agent</span><span class="tag">上下文工程</span></td>
             <td class="paper-rating">
               <span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star filled">&#9733;</span><span class="star">&#9733;</span>
             </td>
